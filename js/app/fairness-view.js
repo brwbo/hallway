@@ -9,9 +9,9 @@ function bar(cls, label, value) {
 }
 
 const rowsOf = (x) => (!x ? [] : Array.isArray(x) ? x : (x.rows || []));
-const isFlagged = (r) => r.gap === true || (r.gap && r.gap.flag) || r.under === true;
 
 export function renderFairness(root, { fairness, suggestions, candidates, decisions }) {
+  const MIN_GROUP = 3;
   if (!fairness) {
     root.replaceChildren(h("p", { class: "msg", text: "The fairness figures could not load. The shared module is missing." }));
     return;
@@ -26,12 +26,13 @@ export function renderFairness(root, { fairness, suggestions, candidates, decisi
   const titles = { country: "Country", language: "Language", education: "Education route" };
   root.replaceChildren(...Object.keys(titles).map((key) => {
     const rows = rowsOf(stats[key]);
+    const isFlagged = (r) => (r.gap === true || (r.gap && r.gap.flag) || r.under === true) && Math.round((r.pool || 0) * candidates.length) >= MIN_GROUP;
     const groupEl = (r) => {
       const share = Math.round((r.pool || 0) * 100);
       return h("div", { class: "group" },
         h("div", { class: "group-name" }, h("span", { text: r.value }), h("span", { class: "num fine", text: `${share}% of pool` })),
-        h("div", { class: "bars" }, bar("bar-pool", "Whole pool", r.pool), bar("bar-sug", "Suggested", r.suggested), bar("bar-acc", "Accepted", r.accepted)),
-        isFlagged(r) && suggestions.length ? h("p", { class: "gap-note", text: `${r.value} is ${share}% of the pool but ${pct(r.suggested)} of suggestions. Worth a second look.` }) : null);
+        h("div", { class: "bars" }, bar("bar-pool", "Whole pool", r.pool), bar("bar-sug", "Responded", r.suggested), bar("bar-acc", "Accepted", r.accepted)),
+        isFlagged(r) && suggestions.length ? h("p", { class: "gap-note", text: `${r.value} is ${share}% of the pool but ${pct(r.suggested)} of responses so far. They may not have been asked yet.` }) : null);
     };
     const shown = new Set(rows.slice(0, 4));
     rows.filter(isFlagged).slice(0, 3).forEach((r) => shown.add(r));

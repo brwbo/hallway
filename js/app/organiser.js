@@ -69,10 +69,9 @@ function wantsOf(id) {
 }
 
 function evidenceFor(s) {
-  const known = event.evidence_cards && event.evidence_cards[s.candidate_id] && event.evidence_cards[s.candidate_id][s.company_id];
-  if (known) return known;
   const saved = home() ? store.get("evidence") : null;
-  return saved && saved.candidate_id === s.candidate_id ? saved : null;
+  if (saved && saved.candidate_id === s.candidate_id && s.company_id === "c-tuulia") return saved;
+  return (event.evidence_cards && event.evidence_cards[s.candidate_id] && event.evidence_cards[s.candidate_id][s.company_id]) || null;
 }
 
 function needsFor(id) {
@@ -100,7 +99,7 @@ function renderLoad() {
       const used = acceptedCount(id);
       const cap = capacityOf(id);
       return h("div", { class: "load-row" },
-        h("span", { class: "load-name", text: `${cName(id)}${(companyOf(id) || {}).stall ? `, stall ${companyOf(id).stall}` : ""}` }),
+        h("span", { class: "load-name", text: cName(id) }),
         h("span", { class: "track", role: "img", "aria-label": `${used} of ${cap} accepted` }, h("i", { class: "fill bar-acc", style: `transform:scaleX(${Math.min(1, used / cap)})` })),
         h("span", { class: "num fine", text: `${used} of ${cap}` }));
     }),
@@ -125,7 +124,7 @@ function renderGrid() {
         hiddenNow(s.candidate_id) ? plainStack(String(candNumber(s.candidate_id)), company, { size: 56 }) : avatarStack(s.candidate_id, company, { size: 56 }),
         h("span", { class: "rcard-text" },
           h("span", { class: "rcard-name", text: name }),
-          h("span", { class: "meta", text: `${cName(s.company_id)}${company.stall ? `, stall ${company.stall}` : ""}` }),
+          h("span", { class: "meta", text: cName(s.company_id) }),
           h("span", { class: `badge badge-${st}`, text: STATE_TEXT[st] }))));
   }));
 }
@@ -145,7 +144,7 @@ function exportCsv() {
   const follow = store.get(key("followups"), {});
   const rows = decisions.map((d) => {
     const f = follow[d.suggestion_id] || {};
-    return { company: cName(d.company_id), candidate: shownName(d.candidate_id), decision: d.status, decided_by: d.by, decided_at: d.at, stall: (companyOf(d.company_id) || {}).stall || "", talked: f.talked || "", outcome: f.outcome || "", note: f.note || "" };
+    return { company: cName(d.company_id), candidate: shownName(d.candidate_id), decision: d.status, decided_by: d.by, decided_at: d.at, talked: f.talked || "", outcome: f.outcome || "", note: f.note || "" };
   });
   download(`hallway-decisions-${eventId}.csv`, buildCsv(rows), "text/csv");
 }
@@ -191,7 +190,7 @@ function openDetail(id) {
   const match = wants.filter((w) => offersOf(s.company_id).includes(w));
   const cap = capacityOf(s.company_id);
   const atLimit = !d && acceptedCount(s.company_id) >= cap;
-  const ev = hiddenNow(s.candidate_id) ? null : evidenceFor(s);
+  const ev = evidenceFor(s);
   const quotes = ev && (ev.in_their_words || []).slice(0, 2);
   const need = needsFor(s.company_id);
   const tasks = need && (need.tasks || []).filter(Boolean).slice(0, 3);
@@ -201,15 +200,17 @@ function openDetail(id) {
         hiddenNow(s.candidate_id) ? plainStack(String(candNumber(s.candidate_id)), company, { size: 72 }) : avatarStack(s.candidate_id, company, { size: 72 }),
         h("div", { class: "person-who" },
           h("h2", { id: "detail-h", text: name }),
-          h("p", { class: "meta", text: `Responded to ${cName(s.company_id)}${company.stall ? `, stall ${company.stall}` : ""}` }))),
+          h("p", { class: "meta", text: `Responded to ${cName(s.company_id)}` }))),
       h("button", { class: "btn btn-small", type: "button", onclick: () => detail.close() }, "Close")),
     section("Why this conversation", h("p", { text: s.why })),
-    wants.length ? section("Support they asked for", h("p", { text: `${wants.join(", ")}. ${match.length ? `Offered here: ${match.join(", ")}.` : "None of it is offered here."}` })) : null,
+    d && wants.length ? section("Support they asked for", h("p", { text: `${wants.join(", ")}. ${match.length ? `Offered here: ${match.join(", ")}.` : "None of it is offered here."}` })) : null,
     quotes && quotes.length ? section("In their own words", h("ul", { class: "quotes" }, quotes.map((q) => h("li", {}, h("blockquote", { text: q }))))) : null,
     need && need.title ? section(`What ${cName(s.company_id)} is looking for`, h("p", { class: "meta", text: need.title }), tasks && tasks.length ? h("ul", { class: "plain" }, tasks.map((t) => h("li", { text: t }))) : null) : null,
     section("A question to open with", h("p", { class: "ask", text: s.opening_question })),
-    d ? h("p", { class: `state${d.status === "skipped" ? " state-skip" : ""}`, text: d.status === "accepted" ? `Accepted by ${d.by}. ${shownName(s.candidate_id)} can now see the invitation on the job seeker tab.` : `Skipped by ${d.by}. The job seeker is not told.` })
-      : h("div", { class: "row" },
+    d ? h("div", { class: "sheet-actions" },
+        h("p", { class: `state${d.status === "skipped" ? " state-skip" : ""}`, text: d.status === "accepted" ? `Accepted by ${d.by}. ${shownName(s.candidate_id)} can now see the invitation.` : `Skipped by ${d.by}. The job seeker is not told.` }),
+        d.status === "accepted" ? h("button", { class: "btn btn-small", type: "button", onclick: () => { detail.close(); el("tab-seeker").click(); seeker.show(s.candidate_id); } }, `See what ${pName(s.candidate_id).split(" ")[0]} sees`) : null)
+      : h("div", { class: "row sheet-actions" },
         h("button", { class: "btn btn-primary", type: "button", disabled: atLimit, "aria-label": `Accept ${title}, decided by Elina`, onclick: () => decide(s, "accepted") }, "Accept"),
         h("button", { class: "btn", type: "button", "aria-label": `Skip ${title}, decided by Elina`, onclick: () => decide(s, "skipped") }, "Skip"),
         h("span", { class: "fine", text: atLimit ? `${cName(s.company_id)} is at its limit of ${cap}. Skip this one, or raise the limit on the company page.` : "Decided by Elina" }))];
@@ -226,6 +227,8 @@ function decide(s, status) {
   const said = `${status === "accepted" ? "Accepted" : "Skipped"} ${cName(s.company_id)} and ${pName(s.candidate_id)}.`;
   detail.close();
   refresh();
+  const back = el("grid").querySelector(`[data-id="${CSS.escape(s.id)}"] .rcard-open`);
+  if (back) back.focus();
   el("count").textContent = `${said} ${el("count").textContent}`;
   if (status === "accepted" && seeker) seeker.show(s.candidate_id);
 }
@@ -257,7 +260,7 @@ async function runStory() {
     let messages = [{ role: "user", content: MARIA_ASK }];
     let data = null;
     for (let i = 0; i < 6; i += 1) {
-      data = await api("/api/needs", { messages });
+      data = await api("/api/needs", { messages, company_id: "c-tuulia" });
       if (data.done && data.needs_card) break;
       messages = [...messages, { role: "assistant", content: data.reply }, { role: "user", content: MARIA_ANSWERS[i % MARIA_ANSWERS.length] }];
     }
@@ -268,7 +271,7 @@ async function runStory() {
     storyMsg("Ahmed is answering the questions...");
     const q = await api("/api/questions", { needs_card: needs });
     const answers = q.questions.map((x, i) => ({ question_id: x.id, question: x.text, answer: AHMED_ANSWERS[i % AHMED_ANSWERS.length] }));
-    const ev = (await api("/api/evidence", { needs_card: needs, answers })).evidence_card;
+    const ev = (await api("/api/evidence", { needs_card: needs, answers, candidate_id: "p-ahmed" })).evidence_card;
     ev.candidate_id = ev.candidate_id || "p-ahmed";
     store.set("evidence", ev);
     markStep(3);
@@ -312,13 +315,13 @@ function resetStory() {
 
 function drawFilters() {
   const select = el("f-company");
-  select.replaceChildren(h("option", { value: "all", text: "All companies" }), ...event.companies.map((c) => h("option", { value: c.id, text: `${c.name}, stall ${c.stall}` })));
+  select.replaceChildren(h("option", { value: "all", text: "All companies" }), ...event.companies.map((c) => h("option", { value: c.id, text: c.name })));
   select.value = filter.company;
 }
 
 function drawEventMeta() {
   const when = new Date(`${event.event.date}T12:00:00`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  el("event-meta").textContent = `${when}, ${event.event.venue}, ${event.event.format}. ${event.companies.length} stalls and ${event.candidates.length} people.`;
+  el("event-meta").textContent = `${when}, ${event.event.venue}, ${event.event.format}. ${event.companies.length} companies and ${event.candidates.length} people.`;
   const canStory = home();
   el("run").disabled = !canStory;
   el("reset").disabled = !canStory;
@@ -341,7 +344,7 @@ async function loadEvent(id) {
   drawFilters();
   drawEventMeta();
   followup = mountFollowup(el("followup"), { getAccepted, storeKey: key("followups") });
-  seeker = mountSeeker({ pick: el("seeker-pick"), list: el("invites"), empty: el("invites-empty") }, { event: event.event, organiser: ELINA, candidates: event.candidates, invitationsFor });
+  seeker = mountSeeker({ pick: el("seeker-pick"), list: el("invites"), empty: el("invites-empty") }, { event: event.event, organiser: ELINA, candidates: event.candidates, invitationsFor, answeredFor: (id) => suggestions.filter((s) => s.candidate_id === id).map((s) => { const c = companyOf(s.company_id); return c && c.stall ? `${c.name} (stall ${c.stall})` : cName(s.company_id); }) });
   markStep(0);
   refresh();
 }

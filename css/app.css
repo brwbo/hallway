@@ -283,6 +283,9 @@ section > .field { margin-block: var(--space-md); }
 .sheet-part { display: grid; gap: var(--space-xs); }
 .sheet-part h3, .invite h4 { font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600; color: var(--color-accent); margin: 0; }
 .sheet-part p, .sheet-part ul { margin: 0; }
+.sheet .quotes blockquote { font-size: var(--text-md); }
+.sheet-actions { position: sticky; bottom: calc(var(--space-lg) * -1); margin: 0 calc(var(--space-lg) * -1) calc(var(--space-lg) * -1); padding: var(--space-md) var(--space-lg); background: var(--color-paper); border-top: var(--rule-hair) solid var(--color-rule); display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; }
+.sheet-actions .state { margin: 0; }
 .sheet .ask, .invite .ask { margin: 0; font-family: var(--font-display); font-size: var(--text-md); line-height: 1.35; color: var(--color-ink); }
 .sheet .state { margin: 0; font-weight: 600; color: var(--color-accent); }
 .sheet .state-skip { color: var(--color-muted); }

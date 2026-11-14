@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F0E3">
 <title>Event · Hallway</title>
-<meta name="description" content="Every response for an Espoo event in one grid. A named person accepts each conversation, and the job seeker sees which stall wants to speak to them.">
+<meta name="description" content="Every response for an Espoo event in one grid. A named person accepts each conversation, and only the job seeker sees which stall wants to speak to them.">
 <link rel="icon" href="data:,">
 <link rel="preload" href="../assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -25,7 +25,7 @@
 <main class="page" id="main">
   <div class="page-head">
     <h1>Event</h1>
-    <p class="lead">Every response for the event, in one grid. Elina Virtanen from City of Espoo International Working Life Services opens each one and decides. Hallway only suggests.</p>
+    <p class="lead">Every response for the event, in one grid. Hallway does not filter anyone: it writes a one-line reason and an opening question for each response. Elina Virtanen from City of Espoo International Working Life Services opens each one and decides.</p>
     <p id="demo-note" class="note" hidden>Demo mode: scripted answers, no AI key set</p>
   </div>
   <div class="event-bar">
@@ -76,8 +76,8 @@
     <div id="followup"></div>
   </section>
   <section class="block" aria-labelledby="fair-h">
-    <div class="block-head"><h2 id="fair-h">Is anyone being left out?</h2><p class="fine">For each group: its share of everyone at the event, of the suggestions, and of the accepted conversations. A group that is much smaller in suggestions than in the pool is flagged, so a person can look again.</p></div>
-    <div class="fair-legend" aria-hidden="true"><span><i class="swatch sw-pool"></i>Whole pool</span><span><i class="swatch sw-sug"></i>Suggested</span><span><i class="swatch sw-acc"></i>Accepted</span></div>
+    <div class="block-head"><h2 id="fair-h">Is anyone being left out?</h2><p class="fine">Hallway passes on every response and filters nobody. For each group this shows its share of everyone at the event, of those who have responded, and of the conversations a person accepted. A group of three or more that is far smaller among responses is flagged, so a person can check who has not been asked yet.</p></div>
+    <div class="fair-legend" aria-hidden="true"><span><i class="swatch sw-pool"></i>Whole pool</span><span><i class="swatch sw-sug"></i>Responded</span><span><i class="swatch sw-acc"></i>Accepted</span></div>
     <div class="fair-grid" id="fair"></div>
   </section>
   <section class="story" aria-labelledby="story-h">

@@ -80,7 +80,7 @@ export function timeLabel(iso) {
 export const MARIA_ASK = "we need a cybersecurity person";
 
 export const MARIA_ANSWERS = [
-  "Mostly card payment checks and the customer dashboard. We have never had someone own that.",
+  "Mostly how people sign in to the payments app and reset passwords. We have never had someone own that.",
   "Someone who can review how we handle customer data and talk it through with our developers. A first year in the role is fine.",
   "Espoo office one day a week, the rest remote. English is fine, Finnish is not required."
 ];

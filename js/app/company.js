@@ -84,7 +84,7 @@ async function turn(text) {
   setBusy(true);
   const wait = bubble("assistant", "Thinking...", "bubble-wait");
   try {
-    const data = await api("/api/needs", { messages });
+    const data = await api("/api/needs", { messages, company_id: "c-tuulia" });
     wait.remove();
     messages.push({ role: "assistant", content: data.reply });
     bubble("assistant", data.reply);

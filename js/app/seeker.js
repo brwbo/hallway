@@ -14,7 +14,7 @@ function invitation(inv, ctx) {
         h("h3", { text: `${inv.companyName} wants to speak to you` }),
         h("p", { class: "invite-where", text: `${stall} at ${ctx.event.name}, ${dayLabel(ctx.event.date)}` }))),
     inv.needs && inv.needs.title ? h("div", {}, h("h4", { text: "What they are looking for" }), h("p", { class: "meta", text: inv.needs.title }), tasks.length ? h("ul", { class: "plain" }, tasks.map((t) => h("li", { text: t }))) : null) : null,
-    quotes.length ? h("div", {}, h("h4", { text: "What caught their eye, in your words" }), h("ul", { class: "quotes" }, quotes.map((q) => h("li", {}, h("blockquote", { text: q }))))) : null,
+    quotes.length ? h("div", {}, h("h4", { text: "What stood out, in your words" }), h("ul", { class: "quotes" }, quotes.map((q) => h("li", {}, h("blockquote", { text: q }))))) : null,
     inv.question ? h("div", {}, h("h4", { text: "They may start by asking" }), h("p", { class: "ask", text: inv.question })) : null,
     h("p", { class: "fine", text: `${ctx.organiser} chose this conversation. You can say no, and nothing is recorded about you if you do.` }));
 }
@@ -24,7 +24,8 @@ export function mountSeeker({ pick, list, empty }, ctx) {
     const id = pick.value;
     const mine = ctx.invitationsFor(id);
     empty.hidden = mine.length > 0;
-    if (!mine.length) empty.textContent = "No invitations yet. When the organiser accepts a conversation, the company and its stall show up here.";
+    const answered = ctx.answeredFor(id);
+    if (!mine.length) empty.replaceChildren(...[h("p", { text: "No arranged conversation yet. When the organiser accepts one, the company and its stall show up here. Every stall is open to you on the day." }), answered.length ? h("p", { class: "fine", text: `Companies you answered for: ${answered.join(", ")}.` }) : null].filter(Boolean));
     list.replaceChildren(...mine.map((inv) => invitation(inv, ctx)));
   };
   pick.addEventListener("change", draw);
