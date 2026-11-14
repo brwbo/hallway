@@ -1,0 +1,72 @@
+/* Hallway scene layer: film stage, chips, rail, fallbacks and the extra palette tokens the 3D models read */
+:root {
+  --c-skin-2: #E0AC85; --c-skin-3: #8A5A3C; --c-skin-4: #F0C9A4;
+  --c-hair-2: #6B4A32; --c-hair-3: #1E1914; --c-hair-4: #B9803F; --c-hair-5: #C9C2B4;
+  --c-dusk: #6F8793; --c-dusk-soft: #BFD0D3; --c-rose: #D9A39A;
+}
+
+.film { position: relative; }
+.film-stage { position: relative; }
+.scene-box, .veil, .chip, .rail, .still { display: none; }
+
+.hero { display: grid; gap: var(--space-lg); justify-items: start; align-content: center; min-height: 86svh; padding: var(--space-3xl) var(--gutter) var(--space-2xl); max-width: var(--container); margin-inline: auto; }
+.nogl .wordmark, html:not(.js) .wordmark { font-size: clamp(3.5rem, 7vw, 6.5rem); }
+.hall-art { display: block; width: 100%; height: auto; max-width: 640px; margin-inline: auto; }
+:is(.scrub, .static) .hall-art { display: none; }
+
+html:not(.js) .film-stage, .nogl .film-stage { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: center; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+html:not(.js) .film-stage .hero, .nogl .film-stage .hero { padding-inline: 0; margin: 0; }
+html:not(.js) .film-stage .how, .nogl .film-stage .how { grid-column: 1 / -1; padding-inline: 0; }
+
+:is(.scrub, .static) .scene-box { display: block; position: absolute; inset: 0 0 auto; height: 100svh; }
+:is(.scrub, .static) .scene { display: block; width: 100%; height: 100%; }
+:is(.scrub, .static) .hero { position: relative; z-index: 2; min-height: 100svh; max-width: none; margin: 0; padding: var(--space-3xl) var(--gutter) var(--space-2xl) max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter))); }
+:is(.scrub, .static) .film-stage::before { content: ""; position: absolute; inset: 0 0 auto; height: 100svh; z-index: 1; pointer-events: none; background: linear-gradient(90deg, var(--color-paper) 0%, var(--color-clear) 52%), radial-gradient(ellipse at 50% 46%, var(--color-clear) 58%, var(--color-vignette) 140%); }
+
+.static .still { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: var(--radius-card); background: var(--color-paper-3); box-shadow: var(--shadow-card); margin-bottom: var(--space-xs); }
+
+.scrub .film { height: calc(var(--film-length, 560) * 1svh + 100svh); }
+.scrub .film-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--color-paper); }
+.scrub .hero { position: absolute; inset: 0; will-change: transform, opacity; }
+.scrub .how { position: absolute; inset: 0; z-index: var(--z-overlay); max-width: none; padding: 0; pointer-events: none; }
+.scrub .how-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.scrub .beats { display: block; }
+.scrub .beats li { position: absolute; left: var(--gutter); top: 50%; margin-top: -9rem; display: grid; gap: var(--space-xs); width: min(23rem, calc(100% - var(--gutter) * 2)); padding: var(--space-md) var(--space-lg) var(--space-lg); background: var(--color-paper-2); border-radius: var(--radius-card); box-shadow: var(--shadow-card); rotate: -1.4deg; opacity: 0; visibility: hidden; will-change: transform, opacity; }
+.scrub .beats h3 { font-size: clamp(1.5rem, 1.5vw + 1rem, 2.25rem); line-height: 1.1; letter-spacing: var(--tracking-display); }
+.scrub .chip { display: block; position: absolute; left: 0; top: 0; z-index: var(--z-overlay); padding: 0.5em 0.95em; font-size: clamp(0.9375rem, 1.1vw, 1.375rem); font-weight: 600; line-height: 1.2; white-space: nowrap; opacity: 0; pointer-events: none; box-shadow: var(--shadow-card); will-change: transform, opacity; }
+.scrub .chip-tag { background: var(--color-accent); color: var(--color-accent-ink); border-radius: var(--radius-pill); }
+.scrub .chip-speech { background: var(--color-paper-2); color: var(--color-ink); border-radius: 1.2em 1.2em 0.3em 1.2em; font-weight: 400; white-space: normal; width: max-content; max-width: 19ch; }
+.scrub .rail { display: flex; gap: var(--space-xs); position: absolute; right: var(--gutter); bottom: clamp(28px, 5vh, 48px); z-index: var(--z-overlay); opacity: 0; }
+.rail i { display: block; width: 36px; height: 4px; border-radius: var(--radius-pill); background: var(--color-rule); transition: background-color var(--dur-short) var(--ease-out); }
+.rail i.is-on { background: var(--color-accent); }
+
+.art-floor { fill: var(--color-paper-3); }
+.art-wall { fill: var(--c-oat); }
+.art-paper { fill: var(--color-paper-2); stroke: var(--color-rule); stroke-width: 1.5; }
+.art-wood { fill: var(--c-wood); }
+.art-moss { fill: var(--c-moss); }
+.art-clay { fill: var(--c-clay); }
+.art-dusk { fill: var(--c-dusk); }
+.art-sage { fill: var(--c-sage); }
+.art-sage-soft { fill: var(--c-sage-soft); }
+.art-oat { fill: var(--c-oat-deep); }
+.art-skin { fill: var(--c-skin-3); }
+.art-skin-light { fill: var(--c-skin-4); }
+.art-hair { fill: var(--c-hair-3); }
+.art-hair-brown { fill: var(--c-hair-2); }
+.art-ink { fill: var(--c-frame); }
+.art-line { fill: none; stroke: var(--c-moss); stroke-width: 4; stroke-linecap: round; }
+.art-dash { fill: none; stroke: var(--c-moss); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 9; }
+.art-deep { fill: var(--c-moss-deep); }
+.art-rule { fill: var(--color-rule); }
+
+@media (max-width: 60rem) {
+  html:not(.js) .film-stage, .nogl .film-stage { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 40rem) {
+  :is(.scrub, .static) .hero { align-content: start; padding-top: clamp(88px, 15svh, 140px); }
+  :is(.scrub, .static) .film-stage::before { background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-clear) 46%), radial-gradient(ellipse at 50% 46%, var(--color-clear) 58%, var(--color-vignette) 140%); }
+  .scrub .beats li { top: auto; margin-top: 0; bottom: 56px; padding: var(--space-sm) var(--space-md) var(--space-md); }
+  .scrub .beats p { font-size: var(--text-sm); line-height: 1.45; }
+  .scrub .rail { bottom: 24px; }
+}

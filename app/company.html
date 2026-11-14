@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F0E3">
+<title>Say what you need · Hallway</title>
+<meta name="description" content="Tell Hallway what the company needs, in plain words, before the event.">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="../index.html">Hallway</a>
+  <nav aria-label="Pages">
+    <a href="company.html" aria-current="page">Company</a>
+    <a href="candidate.html">Candidate</a>
+    <a href="organiser.html">Event floor</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+<main class="page" id="main">
+  <div class="page-head">
+    <h1>Say what you need</h1>
+    <p class="lead">Maria Lehtonen hires for Tuulia Software Oy. Her first ask is short and vague. A few plain questions turn it into a card, and every part of the card is hers to change.</p>
+    <p class="fine">Free for companies. You only see people who answered your own questions.</p>
+    <p id="demo-note" class="note" hidden>Demo mode: scripted answers, no AI key set</p>
+  </div>
+  <div class="split split-company">
+    <section class="chat" aria-labelledby="chat-h">
+      <h2 id="chat-h">Talk it through</h2>
+      <p class="fine">You are chatting with an AI assistant. It only suggests wording, and every part of the card stays yours to change.</p>
+      <div class="log" id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
+      <div class="row" id="helpers">
+        <button class="btn btn-primary" type="button" id="use-example">Use Maria’s example</button>
+        <button class="btn" type="button" id="use-blank">Fill in the card myself</button>
+        <button class="btn" type="button" id="use-answer" hidden>Answer as Maria</button>
+      </div>
+      <form id="form" class="field" autocomplete="off">
+        <label for="msg">Your message</label>
+        <textarea id="msg" rows="2" placeholder="Say what the company needs"></textarea>
+        <div class="row"><button class="btn" type="submit" id="send">Send</button></div>
+      </form>
+      <p class="msg msg-error" id="err" role="alert" hidden></p>
+    </section>
+    <section class="custom" id="custom" aria-labelledby="custom-h" hidden>
+      <h2 id="custom-h">Make it yours</h2>
+      <div id="custom-body"></div>
+    </section>
+    <section class="card-col" aria-labelledby="card-h">
+      <h2 id="card-h" class="visually-hidden">Needs card</h2>
+      <div id="card" aria-live="polite"></div>
+    </section>
+  </div>
+</main>
+<footer class="foot"><p>Everyone on this site is fictional. Hallway is a placeholder name.</p></footer>
+<script type="module" src="../js/app/company.js"></script>
+</body>
+</html>

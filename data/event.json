@@ -1,0 +1,432 @@
+{
+  "event": {
+    "id": "e-espoo-talent-day",
+    "name": "Espoo Tech Talent Day",
+    "date": "2026-12-04",
+    "format": "hybrid"
+  },
+  "organiser": {
+    "id": "o-elina",
+    "name": "Elina Virtanen",
+    "team": "City of Espoo International Working Life Services"
+  },
+  "companies": [
+    {
+      "id": "c-tuulia",
+      "name": "Tuulia Software Oy",
+      "sector": "Payments software",
+      "manager": "Maria Lehtonen",
+      "slot": 0,
+      "capacity": 3,
+      "support": [
+        "Relocation help",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "c-nordhaul",
+      "name": "Nordhaul Logistics Oy",
+      "sector": "Logistics",
+      "manager": "Jukka Heikkinen",
+      "slot": 1,
+      "capacity": 2,
+      "support": [
+        "Work permit guidance",
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "c-kuura",
+      "name": "Kuura Health Tech Oy",
+      "sector": "Health technology",
+      "manager": "Sanna Korhonen",
+      "slot": 2,
+      "capacity": 2,
+      "support": [
+        "Relocation help",
+        "Work permit guidance",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "c-aurinkovirta",
+      "name": "Aurinkovirta Energy Oy",
+      "sector": "Cleantech",
+      "manager": "Mikko Salminen",
+      "slot": 3,
+      "capacity": 3,
+      "support": [
+        "Finnish language lessons",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "c-pikkupeli",
+      "name": "Pikkupeli Studio Oy",
+      "sector": "Game studio",
+      "manager": "Laura Nieminen",
+      "slot": 4,
+      "capacity": 3,
+      "support": [
+        "Relocation help"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "p-ahmed",
+      "name": "Ahmed Rahimi",
+      "country": "Iran",
+      "languages": [
+        "Persian",
+        "English"
+      ],
+      "education": "university",
+      "path_note": "Security graduate and student-lab sysadmin, relocating to Finland",
+      "support_wanted": [
+        "Relocation help",
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-aino",
+      "name": "Aino Saarinen",
+      "country": "Finland",
+      "languages": [
+        "Finnish",
+        "English",
+        "Swedish"
+      ],
+      "education": "vocational",
+      "path_note": "Network technician for six years, now studying for a security certificate",
+      "support_wanted": []
+    },
+    {
+      "id": "p-priya",
+      "name": "Priya Nair",
+      "country": "India",
+      "languages": [
+        "English",
+        "Malayalam",
+        "Hindi"
+      ],
+      "education": "university",
+      "path_note": "Backend developer in payments, moved to Espoo for a partner's job",
+      "support_wanted": [
+        "Relocation help",
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-mateusz",
+      "name": "Mateusz Kowalczyk",
+      "country": "Poland",
+      "languages": [
+        "Polish",
+        "English"
+      ],
+      "education": "bootcamp",
+      "path_note": "Former electrician, nine-month full-stack bootcamp, two freelance sites",
+      "support_wanted": [
+        "Work permit guidance",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "p-fatima",
+      "name": "Fatima Zahra El Idrissi",
+      "country": "Morocco",
+      "languages": [
+        "Arabic",
+        "French",
+        "English"
+      ],
+      "education": "university",
+      "path_note": "Data engineer in a telecom for three years, learning Finnish",
+      "support_wanted": [
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-oleksandr",
+      "name": "Oleksandr Shevchenko",
+      "country": "Ukraine",
+      "languages": [
+        "Ukrainian",
+        "Russian",
+        "English"
+      ],
+      "education": "self-taught",
+      "path_note": "Self-taught bug bounty hunter, remote work for a Kyiv web shop",
+      "support_wanted": [
+        "An onboarding buddy",
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-linnea",
+      "name": "Linnea Berg",
+      "country": "Sweden",
+      "languages": [
+        "Swedish",
+        "English",
+        "Finnish"
+      ],
+      "education": "apprenticeship",
+      "path_note": "Apprenticed as a cloud support engineer, now on an on-call rota",
+      "support_wanted": [
+        "Relocation help",
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-kwame",
+      "name": "Kwame Mensah",
+      "country": "Ghana",
+      "languages": [
+        "English",
+        "Twi"
+      ],
+      "education": "university",
+      "path_note": "Mobile developer who built a mobile-money app for a few thousand users",
+      "support_wanted": [
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-sofia",
+      "name": "Sofia Rossi",
+      "country": "Italy",
+      "languages": [
+        "Italian",
+        "English"
+      ],
+      "education": "university",
+      "path_note": "Embedded engineer for medical devices, wants to move into health software",
+      "support_wanted": [
+        "Finnish language lessons",
+        "Relocation help"
+      ]
+    },
+    {
+      "id": "p-jonas",
+      "name": "Jonas Weber",
+      "country": "Germany",
+      "languages": [
+        "German",
+        "English"
+      ],
+      "education": "vocational",
+      "path_note": "Warehouse IT technician who built a pick-route tool in Python",
+      "support_wanted": [
+        "An onboarding buddy",
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-mai",
+      "name": "Mai Tran",
+      "country": "Vietnam",
+      "languages": [
+        "Vietnamese",
+        "English"
+      ],
+      "education": "bootcamp",
+      "path_note": "QA tester who moved into test automation after an evening bootcamp",
+      "support_wanted": [
+        "Relocation help"
+      ]
+    },
+    {
+      "id": "p-eero",
+      "name": "Eero Laitinen",
+      "country": "Finland",
+      "languages": [
+        "Finnish",
+        "English"
+      ],
+      "education": "self-taught",
+      "path_note": "Left school at 17, game modder for ten years, one released indie title",
+      "support_wanted": []
+    },
+    {
+      "id": "p-chidi",
+      "name": "Chidinma Okafor",
+      "country": "Nigeria",
+      "languages": [
+        "English",
+        "Igbo"
+      ],
+      "education": "university",
+      "path_note": "Former nurse, UX certificate, designs clinical dashboards",
+      "support_wanted": [
+        "Work permit guidance",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "p-hana",
+      "name": "Hana Kim",
+      "country": "South Korea",
+      "languages": [
+        "Korean",
+        "English"
+      ],
+      "education": "university",
+      "path_note": "Game artist and tools programmer, two years at a mobile studio",
+      "support_wanted": [
+        "Finnish language lessons",
+        "Relocation help"
+      ]
+    },
+    {
+      "id": "p-diego",
+      "name": "Diego Fernandez",
+      "country": "Spain",
+      "languages": [
+        "Spanish",
+        "English"
+      ],
+      "education": "apprenticeship",
+      "path_note": "Industrial automation apprenticeship, now works with solar inverters",
+      "support_wanted": [
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "p-yusuf",
+      "name": "Yusuf Demir",
+      "country": "Turkey",
+      "languages": [
+        "Turkish",
+        "English",
+        "German"
+      ],
+      "education": "university",
+      "path_note": "Mechanical engineer doing factory energy audits, learning Python",
+      "support_wanted": [
+        "Relocation help",
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-ingrid",
+      "name": "Ingrid Solberg",
+      "country": "Norway",
+      "languages": [
+        "Norwegian",
+        "English"
+      ],
+      "education": "university",
+      "path_note": "Environmental scientist who builds emissions dashboards",
+      "support_wanted": [
+        "Work permit guidance",
+        "An onboarding buddy"
+      ]
+    },
+    {
+      "id": "p-rashid",
+      "name": "Rashid Hossain",
+      "country": "Bangladesh",
+      "languages": [
+        "Bengali",
+        "English"
+      ],
+      "education": "bootcamp",
+      "path_note": "Support engineer with a DevOps bootcamp and a home Kubernetes lab",
+      "support_wanted": [
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-elena",
+      "name": "Elena Popescu",
+      "country": "Romania",
+      "languages": [
+        "Romanian",
+        "English",
+        "French"
+      ],
+      "education": "university",
+      "path_note": "Backend engineer for five years on health-sector integrations",
+      "support_wanted": [
+        "An onboarding buddy",
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-tomas",
+      "name": "Tomas Novak",
+      "country": "Czechia",
+      "languages": [
+        "Czech",
+        "English"
+      ],
+      "education": "vocational",
+      "path_note": "Truck dispatcher who taught himself SQL to cut empty runs",
+      "support_wanted": [
+        "Relocation help",
+        "Finnish language lessons"
+      ]
+    },
+    {
+      "id": "p-amara",
+      "name": "Amara Diallo",
+      "country": "Senegal",
+      "languages": [
+        "French",
+        "Wolof",
+        "English"
+      ],
+      "education": "self-taught",
+      "path_note": "Self-taught front-end developer, volunteers for a tech non-profit",
+      "support_wanted": [
+        "Work permit guidance"
+      ]
+    },
+    {
+      "id": "p-venla",
+      "name": "Venla Rantanen",
+      "country": "Finland",
+      "languages": [
+        "Finnish",
+        "English"
+      ],
+      "education": "apprenticeship",
+      "path_note": "Apprentice software developer at a municipal IT unit for three years",
+      "support_wanted": []
+    },
+    {
+      "id": "p-lucas",
+      "name": "Lucas Almeida",
+      "country": "Brazil",
+      "languages": [
+        "Portuguese",
+        "English",
+        "Spanish"
+      ],
+      "education": "bootcamp",
+      "path_note": "Former bank clerk, bootcamp graduate in fraud-detection analytics",
+      "support_wanted": [
+        "Finnish language lessons",
+        "Relocation help"
+      ]
+    },
+    {
+      "id": "p-nadia",
+      "name": "Nadia Haddad",
+      "country": "Lebanon",
+      "languages": [
+        "Arabic",
+        "English",
+        "French"
+      ],
+      "education": "university",
+      "path_note": "Information-security analyst who ran audits at a bank for four years",
+      "support_wanted": [
+        "An onboarding buddy",
+        "Work permit guidance"
+      ]
+    }
+  ]
+}

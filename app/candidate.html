@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F0E3">
+<title>Answer a real question · Hallway</title>
+<meta name="description" content="Answer a company’s question in your own words.">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="../index.html">Hallway</a>
+  <nav aria-label="Pages">
+    <a href="company.html">Company</a>
+    <a href="candidate.html" aria-current="page">Candidate</a>
+    <a href="organiser.html">Event floor</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+<main class="page" id="main">
+  <div class="page-head">
+    <h1>Answer a real question</h1>
+    <p class="lead">Ahmed Rahimi is a security graduate moving to Finland. He answers the questions a company wrote for its card, in his own words. Nothing here ranks or scores him.</p>
+    <p id="demo-note" class="note" hidden>Demo mode: scripted answers, no AI key set</p>
+  </div>
+  <div class="split">
+    <section aria-labelledby="need-h">
+      <h2 id="need-h">The company’s card</h2>
+      <div class="field">
+        <label for="company-pick">Company</label>
+        <select id="company-pick"></select>
+      </div>
+      <div id="need"></div>
+    </section>
+    <section aria-labelledby="ans-h">
+      <h2 id="ans-h">Questions for you</h2>
+      <p class="fine hint">Your answer is a conversation starter. At the event a person will ask you a follow-up face to face. It is not a test.</p>
+      <p class="msg" id="status" role="status" hidden></p>
+      <form id="qform" class="questions" hidden>
+        <div id="qs" class="questions"></div>
+        <div class="row">
+          <button class="btn btn-primary" type="submit" id="submit">Show my card</button>
+          <button class="btn" type="button" id="use-ahmed">Use Ahmed’s example answers</button>
+        </div>
+      </form>
+      <div id="evidence" aria-live="polite"></div>
+    </section>
+  </div>
+  <section class="moving" aria-labelledby="move-h">
+    <h2 id="move-h">Moving to Finland?</h2>
+    <p class="fine">Say what support would help. The organiser sees it next to each company’s offer. It is never used to rule anyone out.</p>
+    <div class="moving-grid">
+      <div id="wants"></div>
+      <ul class="guide" id="guide" aria-label="Official guides"></ul>
+    </div>
+  </section>
+</main>
+<footer class="foot"><p>Everyone on this site is fictional. Hallway is a placeholder name.</p></footer>
+<script type="module" src="../js/app/candidate.js"></script>
+</body>
+</html>

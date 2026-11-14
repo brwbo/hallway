@@ -1,0 +1,164 @@
+{
+ "c-tuulia": {
+  "company_id": "c-tuulia",
+  "title": "Review our login and authentication system for weaknesses",
+  "summary": "Tuulia Software needs someone to check how people sign in to the payments app and find where it could be broken into.",
+  "tasks": [
+   "Read how sign-in, password reset and sessions work in the payments app and list the weak points",
+   "Try the usual attacks on a test copy, such as stolen sessions and guessable reset links, and write down what worked",
+   "Agree a short fix list with the developers and help check the first two fixes"
+  ],
+  "skills": [
+   {
+    "label": "use access control software",
+    "esco_uri": "http://data.europa.eu/esco/skill/5da73370-f6b9-417d-a94c-09bf01f84aa2"
+   },
+   {
+    "label": "web application security threats",
+    "esco_uri": "http://data.europa.eu/esco/skill/902fb91c-3113-4004-9b4f-79aa86b638b7"
+   },
+   {
+    "label": "perform security vulnerability assessments",
+    "esco_uri": "http://data.europa.eu/esco/skill/f4a85869-1855-45d5-a43c-7ee8cd451996"
+   },
+   {
+    "label": "conduct ICT code review",
+    "esco_uri": "http://data.europa.eu/esco/skill/9d1b08b3-ba1e-41f6-a466-1ac1e62eb5f0"
+   }
+  ],
+  "languages": [
+   "English"
+  ],
+  "location": "Espoo, hybrid"
+ },
+ "c-nordhaul": {
+  "company_id": "c-nordhaul",
+  "title": "Cut empty runs in our delivery planning",
+  "summary": "Nordhaul Logistics wants to find where trucks leave the depot with space to spare and change how loads are planned.",
+  "tasks": [
+   "Sort last year's route and load data into one table",
+   "Find the days and routes where trucks run mostly empty",
+   "Propose one change to the dispatch routine and test it for a week"
+  ],
+  "skills": [
+   {
+    "label": "plan transport operations",
+    "esco_uri": "http://data.europa.eu/esco/skill/de857fbb-91a6-4a3f-8a47-93a9c1a616c8"
+   },
+   {
+    "label": "perform data analysis",
+    "esco_uri": "http://data.europa.eu/esco/skill/2b92a5b2-6758-4ee3-9fb4-b6387a55cc8f"
+   },
+   {
+    "label": "SQL",
+    "esco_uri": "http://data.europa.eu/esco/skill/598de5b0-5b58-4ea7-8058-a4bc4d18c742"
+   },
+   {
+    "label": "logistics",
+    "esco_uri": "http://data.europa.eu/esco/skill/e843973c-23dd-416a-8a9c-9e89512542fb"
+   }
+  ],
+  "languages": [
+   "Finnish",
+   "English"
+  ],
+  "location": "Espoo depot, on site"
+ },
+ "c-kuura": {
+  "company_id": "c-kuura",
+  "title": "Connect our clinic app to patient record systems",
+  "summary": "Kuura Health Tech needs someone to link its appointment app to the record systems clinics already use, safely.",
+  "tasks": [
+   "Map the data fields our app uses against one record system",
+   "Test the connection with made-up patients only",
+   "Write a one-page guide for clinic IT staff"
+  ],
+  "skills": [
+   {
+    "label": "health informatics",
+    "esco_uri": "http://data.europa.eu/esco/skill/fb82ae25-b59f-43fd-aacf-a8308afbe85e"
+   },
+   {
+    "label": "ICT system integration",
+    "esco_uri": "http://data.europa.eu/esco/skill/6fa1c2c0-a012-4ca0-9642-e01569ba322c"
+   },
+   {
+    "label": "data protection",
+    "esco_uri": "http://data.europa.eu/esco/skill/a4346013-a967-4a58-a533-6b32ad1364c5"
+   },
+   {
+    "label": "use technical documentation",
+    "esco_uri": "http://data.europa.eu/esco/skill/cffc3e97-e942-4b13-a2f3-0bf4910c06d3"
+   }
+  ],
+  "languages": [
+   "English"
+  ],
+  "location": "Espoo, hybrid"
+ },
+ "c-aurinkovirta": {
+  "company_id": "c-aurinkovirta",
+  "title": "Turn solar-site readings into a monthly report",
+  "summary": "Aurinkovirta Energy collects readings from 12 solar sites and wants a clear monthly view of which sites lose output.",
+  "tasks": [
+   "Collect the readings from all 12 sites into one table",
+   "Spot the sites that lose output and look for patterns",
+   "Build a simple dashboard for site managers"
+  ],
+  "skills": [
+   {
+    "label": "perform data analysis",
+    "esco_uri": "http://data.europa.eu/esco/skill/2b92a5b2-6758-4ee3-9fb4-b6387a55cc8f"
+   },
+   {
+    "label": "deliver visual presentation of data",
+    "esco_uri": "http://data.europa.eu/esco/skill/c3e36d05-8ae8-447f-bb2b-6f9409f85389"
+   },
+   {
+    "label": "design solar energy systems",
+    "esco_uri": "http://data.europa.eu/esco/skill/50ac5186-bb18-4ffb-9f29-00636853c8ea"
+   },
+   {
+    "label": "Python (computer programming)",
+    "esco_uri": "http://data.europa.eu/esco/skill/ccd0a1d9-afda-43d9-b901-96344886e14d"
+   }
+  ],
+  "languages": [
+   "Finnish",
+   "English"
+  ],
+  "location": "Espoo, with site visits"
+ },
+ "c-pikkupeli": {
+  "company_id": "c-pikkupeli",
+  "title": "Build tools that speed up our level design",
+  "summary": "Pikkupeli Studio wants a developer who makes the designers' slowest steps faster.",
+  "tasks": [
+   "Sit with the level designers for a day and note what slows them down",
+   "Build or fix one tool for the slowest step",
+   "Ask the designers to use it and change it from their feedback"
+  ],
+  "skills": [
+   {
+    "label": "develop software prototype",
+    "esco_uri": "http://data.europa.eu/esco/skill/797a4416-0b8d-44f3-8fcd-eb10bd0be6b4"
+   },
+   {
+    "label": "operate 3D computer graphics software",
+    "esco_uri": "http://data.europa.eu/esco/skill/f5b33464-4df9-4cf3-b468-b0a2d6b3ee85"
+   },
+   {
+    "label": "C++",
+    "esco_uri": "http://data.europa.eu/esco/skill/b633eb55-8f1f-4ae6-ab4c-2022ffe2cb7f"
+   },
+   {
+    "label": "work in teams",
+    "esco_uri": "http://data.europa.eu/esco/skill/60c78287-22eb-4103-9c8c-28deaa460da0"
+   }
+  ],
+  "languages": [
+   "English"
+  ],
+  "location": "Espoo studio, hybrid"
+ }
+}

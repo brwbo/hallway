@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hallway. Say what you mean before the event</title>
+  <meta name="description" content="Hallway gets companies and candidates to say what they really mean before a recruitment event, then suggests conversations that a person accepts or skips. A hackathon prototype with fictional people.">
+  <meta name="theme-color" content="#F6F0E3">
+  <link rel="icon" href="data:,">
+  <link rel="preload" href="assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/site.css?v=1">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/" } }
+  </script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="p-maria" viewBox="0 0 60 100">
+        <rect class="art-deep" x="17" y="70" width="11" height="27" rx="5"/><rect class="art-deep" x="32" y="70" width="11" height="27" rx="5"/>
+        <rect class="art-skin-light" x="2" y="44" width="10" height="28" rx="5"/><rect class="art-skin-light" x="48" y="44" width="10" height="28" rx="5"/>
+        <rect class="art-oat" x="10" y="38" width="40" height="40" rx="14"/>
+        <circle class="art-hair-brown" cx="30" cy="3" r="8"/>
+        <rect class="art-skin-light" x="12" y="6" width="36" height="34" rx="12"/><rect class="art-hair-brown" x="10" y="2" width="40" height="14" rx="8"/>
+        <circle class="art-ink" cx="23" cy="25" r="2.4"/><circle class="art-ink" cx="37" cy="25" r="2.4"/>
+        <circle cx="23" cy="25" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="37" cy="25" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M26 32q4 3 8 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="p-ahmed" viewBox="0 0 60 100">
+        <rect class="art-deep" x="17" y="70" width="11" height="27" rx="5"/><rect class="art-deep" x="32" y="70" width="11" height="27" rx="5"/>
+        <rect class="art-skin" x="2" y="44" width="10" height="28" rx="5"/><rect class="art-skin" x="48" y="44" width="10" height="28" rx="5"/>
+        <rect class="art-moss" x="10" y="38" width="40" height="40" rx="14"/>
+        <rect class="art-skin" x="12" y="6" width="36" height="34" rx="12"/><rect class="art-hair" x="10" y="2" width="40" height="14" rx="8"/>
+        <rect class="art-hair" x="16" y="30" width="28" height="10" rx="5"/>
+        <circle class="art-ink" cx="23" cy="24" r="2.4"/><circle class="art-ink" cx="37" cy="24" r="2.4"/>
+        <path d="M26 33q4 3 8 0" fill="none" stroke="var(--color-paper-2)" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="p-elina" viewBox="0 0 60 100">
+        <rect class="art-hair-brown" x="8" y="10" width="44" height="46" rx="14"/>
+        <rect class="art-deep" x="17" y="70" width="11" height="27" rx="5"/><rect class="art-deep" x="32" y="70" width="11" height="27" rx="5"/>
+        <rect class="art-skin-light" x="2" y="44" width="10" height="28" rx="5"/><rect class="art-skin-light" x="48" y="44" width="10" height="28" rx="5"/>
+        <rect class="art-dusk" x="10" y="38" width="40" height="40" rx="14"/>
+        <rect class="art-skin-light" x="12" y="6" width="36" height="34" rx="12"/><rect class="art-hair-brown" x="10" y="2" width="40" height="14" rx="8"/>
+        <circle class="art-ink" cx="23" cy="25" r="2.4"/><circle class="art-ink" cx="37" cy="25" r="2.4"/>
+        <path d="M26 32q4 3 8 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <pattern id="sheets" width="40" height="8" patternUnits="userSpaceOnUse"><rect width="40" height="8" fill="var(--color-paper-2)"/><rect y="6.5" width="40" height="1.5" fill="var(--color-rule)"/></pattern>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#try">Skip to the tools</a>
+  <header class="nav">
+    <a class="brand" href="#top">Hallway</a>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#try">Try it</a>
+      <a href="#responsible">Responsible by design</a>
+      <a href="app/privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="film" id="film">
+      <div class="film-stage" id="stage">
+        <div class="scene-box"><canvas class="scene" id="scene" aria-hidden="true"></canvas></div>
+        <div class="chip chip-speech" id="chip-speech" aria-hidden="true"></div>
+        <div class="chip chip-tag" aria-hidden="true">Maria Lehtonen</div>
+        <div class="chip chip-tag" aria-hidden="true">Ahmed Rahimi</div>
+        <div class="chip chip-tag" aria-hidden="true">Elina Virtanen</div>
+
+        <section class="hero" id="hero" aria-labelledby="hero-title">
+          <h1 class="wordmark" id="hero-title">Hallway</h1>
+          <p class="promise">Say what you mean before the event.</p>
+          <p class="hero-sub">Companies and candidates answer a few practical questions first. The organiser sees who should talk, and decides.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#try">Try it</a>
+          </div>
+        </section>
+
+        <svg class="hall-art" viewBox="0 0 640 440" role="img" aria-label="A toy event hall with five booths. One booth has a tall stack of identical CVs. Maria, a hiring manager, stands in front of it.">
+          <rect class="art-wall" x="20" y="70" width="600" height="110" rx="20"/>
+          <rect class="art-floor" x="20" y="160" width="600" height="250" rx="28"/>
+          <g>
+            <rect class="art-moss" x="45" y="100" width="90" height="26" rx="8"/><rect class="art-wood" x="45" y="150" width="90" height="40" rx="8"/>
+            <rect class="art-clay" x="165" y="100" width="90" height="26" rx="8"/><rect class="art-wood" x="165" y="150" width="90" height="40" rx="8"/>
+            <rect class="art-dusk" x="285" y="100" width="90" height="26" rx="8"/><rect class="art-wood" x="285" y="150" width="90" height="40" rx="8"/>
+            <rect class="art-oat" x="405" y="100" width="90" height="26" rx="8"/><rect class="art-wood" x="405" y="150" width="90" height="40" rx="8"/>
+            <rect class="art-sage" x="525" y="100" width="90" height="26" rx="8"/><rect class="art-wood" x="525" y="150" width="90" height="40" rx="8"/>
+          </g>
+          <rect x="292" y="8" width="44" height="144" rx="4" fill="url(#sheets)" stroke="var(--color-rule)" stroke-width="1.5"/>
+          <use href="#p-maria" x="338" y="170" width="54" height="90" style="color: var(--c-frame)"/>
+          <use href="#p-ahmed" x="490" y="250" width="54" height="90" style="color: var(--c-frame)"/>
+          <use href="#p-elina" x="90" y="262" width="54" height="90" style="color: var(--c-frame)"/>
+          <path class="art-dash" d="M366 196 Q430 90 516 262"/>
+        </svg>
+
+        <section class="how" id="how" aria-labelledby="how-title">
+          <h2 class="how-title" id="how-title">How it works</h2>
+          <ol class="beats" id="beats">
+            <li data-in="1.75" data-out="3.95">
+              <canvas class="still" width="720" height="540" aria-hidden="true"></canvas>
+              <h3>Fifty CVs that all sound the same.</h3>
+              <p>Everyone writes with the same tools, so every CV says the same things. Maria cannot tell who can do what.</p>
+            </li>
+            <li data-in="4.6" data-out="7.9">
+              <canvas class="still" width="720" height="540" aria-hidden="true"></canvas>
+              <h3>A vague ask becomes a plain card.</h3>
+              <p>Maria says she needs a cybersecurity person. A short chat turns that into three real tasks and the skills they use.</p>
+            </li>
+            <li data-in="8.55" data-out="11.25">
+              <canvas class="still" width="720" height="540" aria-hidden="true"></canvas>
+              <h3>Ahmed answers in his own words.</h3>
+              <p>Two practical questions about Maria’s real need. His answers become an evidence card. There is no score.</p>
+            </li>
+            <li data-in="11.9" data-out="15">
+              <canvas class="still" width="720" height="540" aria-hidden="true"></canvas>
+              <h3>Elina decides. Then they talk.</h3>
+              <p>She sees a suggestion, the reason and a question to ask. A person clicks Accept or Skip. Nothing happens without that click.</p>
+            </li>
+          </ol>
+        </section>
+        <div class="rail" id="rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <section class="statement" id="why">
+      <div class="container">
+        <p class="statement-text">Companies ask too late and too vaguely. CVs all sound alike. Hallway gets both sides to say what they mean first.</p>
+      </div>
+    </section>
+
+    <section class="differ" id="differ" aria-labelledby="differ-title">
+      <div class="container">
+        <div class="head">
+          <h2 id="differ-title">CVs now read the same. Answers do not.</h2>
+          <p>Most people write their CV with the same AI tools, so the lines blur together. Hallway asks something a CV cannot: what would you do on day one of this real job?</p>
+        </div>
+        <div class="differ-grid">
+          <figure class="differ-col">
+            <ul class="snips snips-cv">
+              <li class="snip"><span class="snip-name">Ahmed Rahimi</span><p>Motivated team player with strong communication skills and a passion for security.</p></li>
+              <li class="snip"><span class="snip-name">Oleksandr Shevchenko</span><p>Motivated team player with strong communication skills and a passion for security.</p></li>
+              <li class="snip"><span class="snip-name">Rashid Hossain</span><p>Motivated team player with strong communication skills and a passion for security.</p></li>
+            </ul>
+            <figcaption>On the CVs, three people sound like one.</figcaption>
+          </figure>
+          <figure class="differ-col">
+            <ul class="snips snips-own">
+              <li class="snip"><span class="snip-name">Ahmed Rahimi</span><p>“I would start with the password reset page, because reset links are often guessable or never expire.”</p></li>
+              <li class="snip"><span class="snip-name">Oleksandr Shevchenko</span><p>“I report bugs to bug bounty programmes, mostly broken access control and weak reset flows.”</p></li>
+              <li class="snip"><span class="snip-name">Rashid Hossain</span><p>“I run a small test cluster at home and I broke my own login service three times to see how it failed.”</p></li>
+            </ul>
+            <figcaption>On one company’s question, they sound like themselves.</figcaption>
+          </figure>
+        </div>
+        <p class="fine differ-note">A candidate can still use AI to write an answer, so the card starts a conversation and a person follows up face to face. These names and answers are made up.</p>
+      </div>
+    </section>
+
+    <section class="try" id="try" aria-labelledby="try-title">
+      <div class="container">
+        <div class="head">
+          <h2 id="try-title">Try it from each side of the room</h2>
+          <p>These are the real tools, running on made-up people. Pick a role.</p>
+        </div>
+        <ul class="tiles">
+          <li>
+            <article class="tile">
+              <svg class="tile-art" viewBox="0 0 320 200" aria-hidden="true">
+                <use href="#p-maria" x="18" y="86" width="58" height="97" style="color: var(--c-frame)"/>
+                <rect class="art-paper" x="48" y="14" width="104" height="48" rx="16"/><rect class="art-rule" x="64" y="30" width="72" height="7" rx="3.5"/><rect class="art-rule" x="64" y="44" width="46" height="7" rx="3.5"/>
+                <path class="art-dash" d="M158 40 H188"/>
+                <rect class="art-paper" x="196" y="14" width="104" height="172" rx="14"/>
+                <circle class="art-moss" cx="214" cy="46" r="8"/><rect class="art-rule" x="230" y="42" width="56" height="7" rx="3.5"/>
+                <circle class="art-moss" cx="214" cy="82" r="8"/><rect class="art-rule" x="230" y="78" width="48" height="7" rx="3.5"/>
+                <circle class="art-moss" cx="214" cy="118" r="8"/><rect class="art-rule" x="230" y="114" width="52" height="7" rx="3.5"/>
+                <rect class="art-sage-soft" x="210" y="146" width="40" height="16" rx="8"/><rect class="art-sage-soft" x="256" y="146" width="32" height="16" rx="8"/>
+              </svg>
+              <h3>I run a company</h3>
+              <p>Say what you need in a short chat. Get a plain needs card with three tasks and the skills behind them.</p>
+              <a class="btn btn-primary" href="/app/company.html">Open the company page</a>
+            </article>
+          </li>
+          <li>
+            <article class="tile">
+              <svg class="tile-art" viewBox="0 0 320 200" aria-hidden="true">
+                <use href="#p-ahmed" x="236" y="86" width="58" height="97" style="color: var(--c-frame)"/>
+                <rect class="art-paper" x="20" y="14" width="150" height="46" rx="16"/><rect class="art-rule" x="36" y="28" width="108" height="7" rx="3.5"/><rect class="art-rule" x="36" y="42" width="70" height="7" rx="3.5"/>
+                <rect class="art-paper" x="20" y="76" width="200" height="110" rx="14"/>
+                <path class="art-line" style="stroke: var(--color-ink); stroke-width: 3" d="M38 104 q10 -12 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 M38 130 q10 -12 20 0 t20 0 t20 0 t20 0 t20 0 M38 156 q10 -12 20 0 t20 0 t20 0"/>
+                <rect class="art-sage-soft" x="150" y="148" width="56" height="18" rx="9"/>
+              </svg>
+              <h3>I am a candidate</h3>
+              <p>Answer two practical questions about a real need, in your own words. They become an evidence card, with no score.</p>
+              <a class="btn btn-primary" href="/app/candidate.html">Open the candidate page</a>
+            </article>
+          </li>
+          <li>
+            <article class="tile">
+              <svg class="tile-art" viewBox="0 0 320 200" aria-hidden="true">
+                <rect class="art-ink" x="52" y="10" width="216" height="132" rx="14"/>
+                <rect class="art-paper" x="60" y="18" width="200" height="116" rx="8" style="stroke: none"/>
+                <rect class="art-moss" x="72" y="30" width="96" height="12" rx="6"/>
+                <rect class="art-rule" x="72" y="52" width="150" height="7" rx="3.5"/><rect class="art-rule" x="72" y="66" width="112" height="7" rx="3.5"/>
+                <rect class="art-moss" x="72" y="92" width="64" height="26" rx="13"/><rect class="art-rule" x="146" y="92" width="48" height="26" rx="13"/>
+                <use href="#p-elina" x="262" y="104" width="46" height="77" style="color: var(--c-frame)"/>
+                <use href="#p-maria" x="14" y="104" width="46" height="77" style="color: var(--c-frame)"/>
+                <path class="art-dash" d="M44 176 Q150 150 266 176"/>
+              </svg>
+              <h3>I run the event</h3>
+              <p>See suggested conversations, the reason for each and a question to ask. Accept or skip every one yourself.</p>
+              <a class="btn btn-primary" href="/app/organiser.html">Open the organiser page</a>
+            </article>
+          </li>
+        </ul>
+        <p class="fine try-note">Everyone on these pages is fictional. You do not need to sign in.</p>
+      </div>
+    </section>
+
+    <section class="responsible" id="responsible" aria-labelledby="responsible-title">
+      <div class="container">
+        <div class="resp-grid">
+          <div class="resp-intro">
+            <h2 id="responsible-title">Responsible by design</h2>
+            <p>Hallway helps people talk to each other. It does not decide anything about them.</p>
+          </div>
+          <div class="resp-col">
+            <h3>
+              <svg class="resp-icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="13" r="6"/><path d="M8 35c0-7 5-12 12-12s12 5 12 12M24 29l3 3 6-6"/></svg>
+              A person decides
+            </h3>
+            <ul>
+              <li>Every match is accepted or skipped by a human.</li>
+              <li>No scores, no rankings of people.</li>
+              <li>No automated decisions or profiling about a person.</li>
+            </ul>
+          </div>
+          <div class="resp-col">
+            <h3>
+              <svg class="resp-icon" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="10" rx="12" ry="5"/><path d="M8 10v10c0 3 5 5 12 5s12-2 12-5V10M8 20v10c0 3 5 5 12 5s12-2 12-5V20"/></svg>
+              Little data, all made up
+            </h3>
+            <ul>
+              <li>Synthetic data only. Nobody here is real.</li>
+              <li>Minimal personal data: a name, country, languages, education, the support someone asks for, and a few short answers.</li>
+              <li>A fairness panel shows who is suggested, by country, language and education, against the whole pool. Blind review hides names and pictures until a person accepts.</li>
+            </ul>
+          </div>
+          <div class="resp-col">
+            <h3>
+              <svg class="resp-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 6v28M11 34h18M7 13h26M7 13l-5 12h10zM33 13l-5 12h10z"/></svg>
+              The EU AI Act, in plain words
+            </h3>
+            <p>The Act puts AI that helps choose people for jobs in its high-risk group. So Hallway only suggests, shows its reasons, keeps a person in charge and checks its own spread.</p>
+            <p class="fine">This is a hackathon prototype, not legal advice or a compliance claim.</p>
+            <p class="fine"><a href="app/privacy.html">See what is kept, and the Act feature by feature.</a></p>
+          </div>
+        </div>
+        <div class="limits">
+          <h3>Honest limits</h3>
+          <div class="limits-copy">
+            <p>A candidate can use AI to write an answer.</p>
+            <p>So an evidence card is a place to start talking, not proof of skill. The person running the event asks a follow-up face to face. Suggestions can also be wrong or lopsided, which is why every one can be skipped.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <p class="footer-mark">Hallway</p>
+      <div>
+        <p>Built at Junction 2026 for the City of Espoo challenge Rethinking Recruitment.</p>
+        <p class="fine">Not endorsed by or affiliated with the City of Espoo.</p>
+      </div>
+      <div class="footer-legal">
+        <p class="fine">Hallway is a placeholder name. Everyone shown on this site is fictional.</p>
+        <p class="fine">Released under the MIT licence.</p>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>

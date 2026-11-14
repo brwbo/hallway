@@ -1,0 +1,122 @@
+[
+ {
+  "id": "s-p-diego-c-aurinkovirta",
+  "company_id": "c-aurinkovirta",
+  "candidate_id": "p-diego",
+  "why": "They have read inverter fault logs for two years and say a long output loss usually shows a fault code, which fits spotting the sites that lose output.",
+  "opening_question": "You said you would look up the fault code first. Can you give an example of one you have chased?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-ingrid-c-aurinkovirta",
+  "company_id": "c-aurinkovirta",
+  "candidate_id": "p-ingrid",
+  "why": "They built a monthly dashboard for 30 sites and say they check for missing readings first, which fits the report task.",
+  "opening_question": "You check for missing readings before trusting a chart. How do you check, and what do you do about the gaps?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-yusuf-c-aurinkovirta",
+  "company_id": "c-aurinkovirta",
+  "candidate_id": "p-yusuf",
+  "why": "They compared meter readings with bills in energy audits and say they do a first pass in spreadsheets while learning Python.",
+  "opening_question": "You compared meter readings with bills. What did you do when they did not match?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-elena-c-kuura",
+  "company_id": "c-kuura",
+  "candidate_id": "p-elena",
+  "why": "They describe five years of HL7 interfaces and say they only test with made-up patients, which matches the second task.",
+  "opening_question": "You build HL7 interfaces and test with made-up patients. How do you make the made-up data realistic enough?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-sofia-c-kuura",
+  "company_id": "c-kuura",
+  "candidate_id": "p-sofia",
+  "why": "They write firmware for a medical device and say they would start by reading how record systems store data.",
+  "opening_question": "You said you would start by reading how record systems store data. What would you hope to find in that reading?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-jonas-c-nordhaul",
+  "company_id": "c-nordhaul",
+  "candidate_id": "p-jonas",
+  "why": "They built a route-sorting tool that pickers use daily and say they would ask dispatchers what makes a route hard.",
+  "opening_question": "You said you would ask dispatchers what makes a route hard. What is the first question you would put to them?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-tomas-c-nordhaul",
+  "company_id": "c-nordhaul",
+  "candidate_id": "p-tomas",
+  "why": "They taught themselves SQL to find half-empty Monday trucks, which is the first step of the empty-runs task.",
+  "opening_question": "You found half-empty trucks on Mondays. What did you change, and what did the dispatchers say?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-amara-c-pikkupeli",
+  "company_id": "c-pikkupeli",
+  "candidate_id": "p-amara",
+  "why": "They have not made game tools before and say they would ask designers to show them their slowest day.",
+  "opening_question": "You would ask designers to show you their slowest day. What would you ask them while you watch?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-eero-c-pikkupeli",
+  "company_id": "c-pikkupeli",
+  "candidate_id": "p-eero",
+  "why": "They say they would sit with the level designers for a day before writing anything, which is the first task.",
+  "opening_question": "You said you would sit with the designers for a day. What would you be watching for?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-hana-c-pikkupeli",
+  "company_id": "c-pikkupeli",
+  "candidate_id": "p-hana",
+  "why": "They wrote a prop-placing tool that cut a step from hours to minutes and changed the buttons after artists hesitated.",
+  "opening_question": "You let the artists change the buttons. What did they change, and why?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-ahmed-c-tuulia",
+  "company_id": "c-tuulia",
+  "candidate_id": "p-ahmed",
+  "why": "They describe breaking a login by replaying a session cookie and writing up the fix, which is close to the first task of reviewing your sign-in.",
+  "opening_question": "You wrote about replaying a stolen session cookie in your lab. What would you check first on a payments sign-in, and what would you want to see in the code?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-aino-c-tuulia",
+  "company_id": "c-tuulia",
+  "candidate_id": "p-aino",
+  "why": "They say they notice odd logins in network logs and have done practice labs only, which links to the sign-in review.",
+  "opening_question": "You wrote that you notice odd logins in the logs. What does an odd login look like to you?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-nadia-c-tuulia",
+  "company_id": "c-tuulia",
+  "candidate_id": "p-nadia",
+  "why": "They describe sign-in audits and a fix list written with engineers, and say they have reviewed payment software on paper only.",
+  "opening_question": "You mentioned you have reviewed payment software on paper only. What would you want to try live first?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-oleksandr-c-tuulia",
+  "company_id": "c-tuulia",
+  "candidate_id": "p-oleksandr",
+  "why": "They say they write down every step so developers can repeat a finding, which matches the third task of agreeing a fix list.",
+  "opening_question": "You said you write down every step so developers can repeat it. Can you walk me through one report you wrote?",
+  "status": "pending"
+ },
+ {
+  "id": "s-p-rashid-c-tuulia",
+  "company_id": "c-tuulia",
+  "candidate_id": "p-rashid",
+  "why": "They describe breaking their own login service three times and what customers see when sign-in fails.",
+  "opening_question": "You broke your own login service three times. What did you learn the second time that you missed the first time?",
+  "status": "pending"
+ }
+]

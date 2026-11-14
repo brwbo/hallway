@@ -1,0 +1,393 @@
+{
+ "p-ahmed": {
+  "c-tuulia": {
+   "candidate_id": "p-ahmed",
+   "company_id": "c-tuulia",
+   "headline": "Writes about password reset, session handling and who they would tell",
+   "in_their_words": [
+    "I would start with the password reset page, because reset links are often guessable or never expire.",
+    "In my university lab I broke a login by replaying a stolen session cookie, then wrote up how to stop it.",
+    "If I found a hole before a release I would tell the developers the same day and ask them to hold the release."
+   ],
+   "skills": [
+    {
+     "label": "use access control software",
+     "esco_uri": "http://data.europa.eu/esco/skill/5da73370-f6b9-417d-a94c-09bf01f84aa2"
+    },
+    {
+     "label": "web application security threats",
+     "esco_uri": "http://data.europa.eu/esco/skill/902fb91c-3113-4004-9b4f-79aa86b638b7"
+    },
+    {
+     "label": "perform security vulnerability assessments",
+     "esco_uri": "http://data.europa.eu/esco/skill/f4a85869-1855-45d5-a43c-7ee8cd451996"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-oleksandr": {
+  "c-tuulia": {
+   "candidate_id": "p-oleksandr",
+   "company_id": "c-tuulia",
+   "headline": "Writes about bug bounty reports, reading code first and repeatable write-ups",
+   "in_their_words": [
+    "I report bugs to bug bounty programmes, mostly broken access control and weak reset flows.",
+    "I read the code first and then try to break it, and I write down every step so the developers can repeat it."
+   ],
+   "skills": [
+    {
+     "label": "perform security vulnerability assessments",
+     "esco_uri": "http://data.europa.eu/esco/skill/f4a85869-1855-45d5-a43c-7ee8cd451996"
+    },
+    {
+     "label": "web application security threats",
+     "esco_uri": "http://data.europa.eu/esco/skill/902fb91c-3113-4004-9b4f-79aa86b638b7"
+    },
+    {
+     "label": "conduct ICT code review",
+     "esco_uri": "http://data.europa.eu/esco/skill/9d1b08b3-ba1e-41f6-a466-1ac1e62eb5f0"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-nadia": {
+  "c-tuulia": {
+   "candidate_id": "p-nadia",
+   "company_id": "c-tuulia",
+   "headline": "Writes about sign-in audits at a bank and the limits of paper reviews",
+   "in_their_words": [
+    "At the bank I ran audits on how staff and customers sign in, and I wrote the fix list with the engineers.",
+    "I have only reviewed payment software on paper, I have not tested it live."
+   ],
+   "skills": [
+    {
+     "label": "identify ICT security risks",
+     "esco_uri": "http://data.europa.eu/esco/skill/fe1c2b32-7fe9-4668-affa-07ff658a68cf"
+    },
+    {
+     "label": "apply information security policies",
+     "esco_uri": "http://data.europa.eu/esco/skill/86d2e2ea-1ba2-4aa6-b465-8a1f9abc81b8"
+    },
+    {
+     "label": "ICT security standards",
+     "esco_uri": "http://data.europa.eu/esco/skill/3ff589b7-68df-4ea5-ae41-b395bdb2378f"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-aino": {
+  "c-tuulia": {
+   "candidate_id": "p-aino",
+   "company_id": "c-tuulia",
+   "headline": "Writes about watching network logs and studying for a security certificate",
+   "in_their_words": [
+    "I have set up and watched the network for six years, so I notice odd logins in the logs.",
+    "I am studying for a security certificate in the evenings and have only done practice labs so far."
+   ],
+   "skills": [
+    {
+     "label": "ICT communications protocols",
+     "esco_uri": "http://data.europa.eu/esco/skill/6e4f75b4-c60f-4623-a9ba-760c8245753b"
+    },
+    {
+     "label": "monitor system performance",
+     "esco_uri": "http://data.europa.eu/esco/skill/9190d87f-9792-42e0-bb7f-64294a656bcd"
+    },
+    {
+     "label": "identify ICT security risks",
+     "esco_uri": "http://data.europa.eu/esco/skill/fe1c2b32-7fe9-4668-affa-07ff658a68cf"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-rashid": {
+  "c-tuulia": {
+   "candidate_id": "p-rashid",
+   "company_id": "c-tuulia",
+   "headline": "Writes about breaking their own login service and what customers see",
+   "in_their_words": [
+    "I run a small test cluster at home and I broke my own login service three times to see how it failed.",
+    "I do support, so I know what customers see when sign-in goes wrong."
+   ],
+   "skills": [
+    {
+     "label": "DevOps",
+     "esco_uri": "http://data.europa.eu/esco/skill/f0de4973-0a70-4644-8fd4-3a97080476f4"
+    },
+    {
+     "label": "customer service",
+     "esco_uri": "http://data.europa.eu/esco/skill/15a33d76-4640-438d-ae64-fdc0c1d3eebc"
+    },
+    {
+     "label": "use access control software",
+     "esco_uri": "http://data.europa.eu/esco/skill/5da73370-f6b9-417d-a94c-09bf01f84aa2"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-tomas": {
+  "c-nordhaul": {
+   "candidate_id": "p-tomas",
+   "company_id": "c-nordhaul",
+   "headline": "Writes about learning SQL to find half-empty trucks",
+   "in_their_words": [
+    "I taught myself SQL to find which trucks left the depot half empty on Mondays.",
+    "I know the drivers and dispatchers, so I know what they will push back on."
+   ],
+   "skills": [
+    {
+     "label": "SQL",
+     "esco_uri": "http://data.europa.eu/esco/skill/598de5b0-5b58-4ea7-8058-a4bc4d18c742"
+    },
+    {
+     "label": "logistics",
+     "esco_uri": "http://data.europa.eu/esco/skill/e843973c-23dd-416a-8a9c-9e89512542fb"
+    },
+    {
+     "label": "plan transport operations",
+     "esco_uri": "http://data.europa.eu/esco/skill/de857fbb-91a6-4a3f-8a47-93a9c1a616c8"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-jonas": {
+  "c-nordhaul": {
+   "candidate_id": "p-jonas",
+   "company_id": "c-nordhaul",
+   "headline": "Writes about a pick-route tool used every day",
+   "in_their_words": [
+    "I wrote a small Python tool that sorts pick routes in our warehouse, and the pickers use it daily.",
+    "I would ask the dispatchers first what makes a route hard."
+   ],
+   "skills": [
+    {
+     "label": "Python (computer programming)",
+     "esco_uri": "http://data.europa.eu/esco/skill/ccd0a1d9-afda-43d9-b901-96344886e14d"
+    },
+    {
+     "label": "manage warehouse operations",
+     "esco_uri": "http://data.europa.eu/esco/skill/fa7be6bf-f906-4b8e-857d-48a9a7da901c"
+    },
+    {
+     "label": "plan transport operations",
+     "esco_uri": "http://data.europa.eu/esco/skill/de857fbb-91a6-4a3f-8a47-93a9c1a616c8"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-elena": {
+  "c-kuura": {
+   "candidate_id": "p-elena",
+   "company_id": "c-kuura",
+   "headline": "Writes about record-system interfaces and testing with made-up patients",
+   "in_their_words": [
+    "I have built HL7 interfaces between a lab system and a hospital record system for five years.",
+    "I only ever test with made-up patients, never real records."
+   ],
+   "skills": [
+    {
+     "label": "health informatics",
+     "esco_uri": "http://data.europa.eu/esco/skill/fb82ae25-b59f-43fd-aacf-a8308afbe85e"
+    },
+    {
+     "label": "ICT system integration",
+     "esco_uri": "http://data.europa.eu/esco/skill/6fa1c2c0-a012-4ca0-9642-e01569ba322c"
+    },
+    {
+     "label": "data protection",
+     "esco_uri": "http://data.europa.eu/esco/skill/a4346013-a967-4a58-a533-6b32ad1364c5"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-sofia": {
+  "c-kuura": {
+   "candidate_id": "p-sofia",
+   "company_id": "c-kuura",
+   "headline": "Writes about medical device firmware and reading how records are stored",
+   "in_their_words": [
+    "I write firmware for a blood-pressure monitor and I follow the safety documentation closely.",
+    "I have not worked with record systems, so I would start by reading how they store data."
+   ],
+   "skills": [
+    {
+     "label": "embedded systems",
+     "esco_uri": "http://data.europa.eu/esco/skill/2180bd8c-86de-4889-8165-adac902eee9d"
+    },
+    {
+     "label": "health informatics",
+     "esco_uri": "http://data.europa.eu/esco/skill/fb82ae25-b59f-43fd-aacf-a8308afbe85e"
+    },
+    {
+     "label": "use technical documentation",
+     "esco_uri": "http://data.europa.eu/esco/skill/cffc3e97-e942-4b13-a2f3-0bf4910c06d3"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-ingrid": {
+  "c-aurinkovirta": {
+   "candidate_id": "p-ingrid",
+   "company_id": "c-aurinkovirta",
+   "headline": "Writes about a monthly emissions dashboard and checking for missing readings",
+   "in_their_words": [
+    "I built a dashboard of emissions from 30 sites in Python and sent it to managers every month.",
+    "I check for missing readings before I trust any chart."
+   ],
+   "skills": [
+    {
+     "label": "perform data analysis",
+     "esco_uri": "http://data.europa.eu/esco/skill/2b92a5b2-6758-4ee3-9fb4-b6387a55cc8f"
+    },
+    {
+     "label": "deliver visual presentation of data",
+     "esco_uri": "http://data.europa.eu/esco/skill/c3e36d05-8ae8-447f-bb2b-6f9409f85389"
+    },
+    {
+     "label": "Python (computer programming)",
+     "esco_uri": "http://data.europa.eu/esco/skill/ccd0a1d9-afda-43d9-b901-96344886e14d"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-yusuf": {
+  "c-aurinkovirta": {
+   "candidate_id": "p-yusuf",
+   "company_id": "c-aurinkovirta",
+   "headline": "Writes about factory energy audits and spreadsheets before Python",
+   "in_their_words": [
+    "I carried out energy audits at factories and compared meter readings with the bills.",
+    "I am still learning Python, so I do the first pass in spreadsheets."
+   ],
+   "skills": [
+    {
+     "label": "conduct energy audit",
+     "esco_uri": "http://data.europa.eu/esco/skill/0ad6d5e8-593f-4191-843c-439b23a468ca"
+    },
+    {
+     "label": "energy efficiency",
+     "esco_uri": "http://data.europa.eu/esco/skill/83fc0b2b-6cd2-46af-b1ff-d3fc83604c26"
+    },
+    {
+     "label": "perform data analysis",
+     "esco_uri": "http://data.europa.eu/esco/skill/2b92a5b2-6758-4ee3-9fb4-b6387a55cc8f"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-diego": {
+  "c-aurinkovirta": {
+   "candidate_id": "p-diego",
+   "company_id": "c-aurinkovirta",
+   "headline": "Writes about solar inverter fault logs",
+   "in_their_words": [
+    "I did my apprenticeship on solar inverters and I have read their fault logs for two years.",
+    "A site that loses output for weeks usually has a fault code I would look up first."
+   ],
+   "skills": [
+    {
+     "label": "design solar energy systems",
+     "esco_uri": "http://data.europa.eu/esco/skill/50ac5186-bb18-4ffb-9f29-00636853c8ea"
+    },
+    {
+     "label": "Internet of Things",
+     "esco_uri": "http://data.europa.eu/esco/skill/f049d050-12da-4e40-813a-2b5eb6df6b51"
+    },
+    {
+     "label": "monitor system performance",
+     "esco_uri": "http://data.europa.eu/esco/skill/9190d87f-9792-42e0-bb7f-64294a656bcd"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-eero": {
+  "c-pikkupeli": {
+   "candidate_id": "p-eero",
+   "company_id": "c-pikkupeli",
+   "headline": "Writes about a solo released game and sitting with designers first",
+   "in_their_words": [
+    "I have made mods for ten years and a game I released alone has about 4,000 players.",
+    "I would sit with the level designers for a day before I wrote anything."
+   ],
+   "skills": [
+    {
+     "label": "develop software prototype",
+     "esco_uri": "http://data.europa.eu/esco/skill/797a4416-0b8d-44f3-8fcd-eb10bd0be6b4"
+    },
+    {
+     "label": "operate 3D computer graphics software",
+     "esco_uri": "http://data.europa.eu/esco/skill/f5b33464-4df9-4cf3-b468-b0a2d6b3ee85"
+    },
+    {
+     "label": "work in teams",
+     "esco_uri": "http://data.europa.eu/esco/skill/60c78287-22eb-4103-9c8c-28deaa460da0"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-hana": {
+  "c-pikkupeli": {
+   "candidate_id": "p-hana",
+   "company_id": "c-pikkupeli",
+   "headline": "Writes about a level-placement tool and artists changing the buttons",
+   "in_their_words": [
+    "At my last studio I wrote a tool that placed trees and rocks in a level, and it cut that step from hours to minutes.",
+    "Artists were afraid to use it until I let them change the buttons."
+   ],
+   "skills": [
+    {
+     "label": "C++",
+     "esco_uri": "http://data.europa.eu/esco/skill/b633eb55-8f1f-4ae6-ab4c-2022ffe2cb7f"
+    },
+    {
+     "label": "operate 3D computer graphics software",
+     "esco_uri": "http://data.europa.eu/esco/skill/f5b33464-4df9-4cf3-b468-b0a2d6b3ee85"
+    },
+    {
+     "label": "software UI design patterns",
+     "esco_uri": "http://data.europa.eu/esco/skill/1019423b-3368-4f83-b24f-19e5fa23e816"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ },
+ "p-amara": {
+  "c-pikkupeli": {
+   "candidate_id": "p-amara",
+   "company_id": "c-pikkupeli",
+   "headline": "Writes about interfaces in JavaScript and asking designers for their slowest day",
+   "in_their_words": [
+    "I build interfaces in JavaScript and I volunteer at a tech non-profit where I teach beginners.",
+    "I have not made game tools before, so I would ask the designers to show me their slowest day."
+   ],
+   "skills": [
+    {
+     "label": "JavaScript",
+     "esco_uri": "http://data.europa.eu/esco/skill/3cd569a2-4f88-4c1e-9995-8dce8c5e51a7"
+    },
+    {
+     "label": "mentor individual employees",
+     "esco_uri": "http://data.europa.eu/esco/skill/fb9c12af-ec45-498a-8e52-891371191557"
+    },
+    {
+     "label": "web programming",
+     "esco_uri": "http://data.europa.eu/esco/skill/69bbd53f-fbb0-4476-b4b2-ef7844464e28"
+    }
+   ],
+   "note": "Not a score. A starting point for a conversation."
+  }
+ }
+}

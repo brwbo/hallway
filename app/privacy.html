@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F0E3">
+<title>Privacy and the EU AI Act · Hallway</title>
+<meta name="description" content="What Hallway keeps, where it lives, how it maps to the EU AI Act, and a button that deletes it.">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="../index.html">Hallway</a>
+  <nav aria-label="Pages">
+    <a href="company.html">Company</a>
+    <a href="candidate.html">Candidate</a>
+    <a href="organiser.html">Event floor</a>
+    <a href="privacy.html" aria-current="page">Privacy</a>
+  </nav>
+</header>
+<main class="page" id="main">
+  <div class="page-head">
+    <h1>Privacy and the EU AI Act</h1>
+    <p class="lead">What Hallway keeps, where it lives, and how it lines up with the rules for AI that helps choose people for jobs. This is a hackathon prototype, so it is not legal advice and not a compliance claim.</p>
+  </div>
+
+  <section class="block" aria-labelledby="kept-h">
+    <div class="block-head"><h2 id="kept-h">What Hallway keeps</h2><p class="fine">Only what a conversation needs. Everyone in the demo is made up.</p></div>
+    <table class="pilot pilot-even">
+      <thead><tr><th scope="col">Item</th><th scope="col">Why it is needed</th><th scope="col">Where it lives</th><th scope="col">How long</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Company card</th><td data-col="Why it is needed">So candidates know the real need.</td><td data-col="Where it lives">This browser, in the prototype.</td><td data-col="How long">Until you delete it.</td></tr>
+        <tr><th scope="row">Candidate answers</th><td data-col="Why it is needed">To start a conversation, in the person’s own words.</td><td data-col="Where it lives">This browser.</td><td data-col="How long">Until you delete it.</td></tr>
+        <tr><th scope="row">Support asked for</th><td data-col="Why it is needed">To set it beside what a company offers.</td><td data-col="Where it lives">This browser.</td><td data-col="How long">Until you delete it.</td></tr>
+        <tr><th scope="row">Decisions</th><td data-col="Why it is needed">So a person’s oversight can be checked.</td><td data-col="Where it lives">This browser, with the organiser’s name and the time.</td><td data-col="How long">Until you delete it.</td></tr>
+        <tr><th scope="row">Follow-up notes</th><td data-col="Why it is needed">So the organiser can write to people afterwards.</td><td data-col="Where it lives">This browser.</td><td data-col="How long">Until you delete it.</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">In a pilot these move to Espoo’s own systems, and the retention period is set with Espoo’s data protection officer.</p>
+    <p>Hallway never collects photos, voice, faces, location, scores, rankings or any guess about how someone feels.</p>
+    <p>The pages call small server functions that read text and store nothing. When an AI key is set on the server, the card or answers are sent to that AI provider to write cards, questions and suggestions. This public demo runs without one.</p>
+  </section>
+
+  <section class="block" aria-labelledby="act-h">
+    <div class="block-head"><h2 id="act-h">The EU AI Act, feature by feature</h2><p class="fine">AI that helps select people for jobs is high risk under the Act. Here is what Hallway already does, and what a real pilot would still need.</p></div>
+    <table class="pilot">
+      <thead><tr><th scope="col">Requirement</th><th scope="col">What Hallway does</th><th scope="col">What a pilot still needs</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Human oversight</th><td data-col="What Hallway does">A named person accepts or skips every match. Nothing happens on its own.</td><td data-col="What a pilot still needs">Training for organisers, and a way to stop the system.</td></tr>
+        <tr><th scope="row">Transparency</th><td data-col="What Hallway does">Each suggestion shows its reason. The company page says it is an AI assistant, and the site says when answers are scripted.</td><td data-col="What a pilot still needs">Plain notices for candidates before they take part.</td></tr>
+        <tr><th scope="row">Record keeping</th><td data-col="What Hallway does">The decision log shows who decided what, and when.</td><td data-col="What a pilot still needs">Logs kept on Espoo’s systems for a set period.</td></tr>
+        <tr><th scope="row">Data and bias</th><td data-col="What Hallway does">A fairness panel compares who is suggested with the whole pool. Blind review hides names and pictures until a person accepts. Country, language and education never pick anyone.</td><td data-col="What a pilot still needs">Testing on real, consented data with Espoo before use.</td></tr>
+        <tr><th scope="row">Accuracy</th><td data-col="What Hallway does">Code checks that every quote on an evidence card is the candidate’s own words. A scripted fallback keeps it working if the AI fails. Automated tests cover the server.</td><td data-col="What a pilot still needs">Testing at real events, and a plan for mistakes.</td></tr>
+        <tr><th scope="row">Banned uses</th><td data-col="What Hallway does">No emotion recognition, no biometric identification and no social scoring.</td><td data-col="What a pilot still needs">Keeping it that way.</td></tr>
+        <tr><th scope="row">The rest of the high-risk rules</th><td data-col="What Hallway does">Not done in this prototype.</td><td data-col="What a pilot still needs">Risk management, technical documentation, a conformity assessment, registration, a data protection impact assessment, and Espoo’s duties as the organisation using it.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="block" aria-labelledby="mine-h">
+    <div class="block-head"><h2 id="mine-h">What this browser holds right now</h2><p class="fine">This is the real list of everything Hallway has saved here. Delete it and it is gone.</p></div>
+    <div id="stored" aria-live="polite"></div>
+    <div class="row"><button class="btn" type="button" id="wipe">Delete everything in this browser</button></div>
+    <p class="msg" id="wipe-msg" role="status" hidden></p>
+  </section>
+</main>
+<footer class="foot"><p>Everyone on this site is fictional. Hallway is a placeholder name.</p></footer>
+<script type="module" src="../js/app/privacy.js"></script>
+</body>
+</html>
