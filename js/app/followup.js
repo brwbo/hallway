@@ -57,6 +57,7 @@ export function mountFollowup(root, { getAccepted }) {
         select("What happened next", OUTCOMES, rec.outcome, (v) => { rec.outcome = v; syncDraft(); summary(); }),
         h("div", { class: "field" }, h("label", { for: noteId, text: "A short note" }), note)),
       h("div", { class: "field" }, h("p", { class: "label", text: "Follow-up note, to edit and send yourself" }), draftEl),
+      h("p", { class: "fine", text: "Send it within one to two days, while the conversation is still fresh." }),
       h("div", { class: "row" }, copy, reset),
       status);
   }

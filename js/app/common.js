@@ -89,3 +89,14 @@ export const AHMED_ANSWERS = [
   "In my final year I built a small web shop with weak spots on purpose, then attacked it myself and wrote down every way in. Fixing each one taught me more than the lectures did.",
   "I would ask how card data moves through the system and who can touch it, then read last month’s logs. I am new to Finland, so I would also ask who can teach me the local rules."
 ];
+
+export function download(filename, text, type = "text/plain") {
+  const url = URL.createObjectURL(new Blob([text], { type: `${type};charset=utf-8` }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}

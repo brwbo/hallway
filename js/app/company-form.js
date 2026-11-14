@@ -129,7 +129,25 @@ function listEditor({ legend, hint, getItems, setItems, max, min = 0, addLabel, 
 export function mountCustomiser(root, card, { onChange, requestQuestions }) {
   const state = card;
   let timer = 0;
-  const commit = () => { clearTimeout(timer); timer = setTimeout(() => onChange(state), 120); };
+  const checklist = h("ul", { class: "check", "aria-label": "Card checklist" });
+  const checklistTitle = h("p", { class: "label" });
+  const drawChecklist = () => {
+    const filled = (list) => (list || []).filter((x) => String(x).trim());
+    const checks = [
+      ["A clear job title", Boolean(state.title) && !/^(Untitled role|The role you are hiring for)$/.test(state.title)],
+      ["Three real tasks", filled(state.tasks).length >= 3],
+      ["At least three skills", state.skills.length >= 3],
+      ["Languages and a place", state.languages.length > 0 && Boolean(state.location)],
+      ["Questions for candidates", state.questions.length > 0],
+      ["Support for people moving to Finland", state.support.length > 0]
+    ];
+    checklistTitle.textContent = `Card checklist: ${checks.filter(([, ok]) => ok).length} of ${checks.length} done`;
+    checklist.replaceChildren(...checks.map(([label, ok]) => h("li", { class: ok ? "is-done" : "" },
+      h("span", { class: "check-mark", "aria-hidden": "true" }),
+      h("span", { text: label }),
+      h("span", { class: "visually-hidden", text: ok ? " (done)" : " (to do)" }))));
+  };
+  const commit = () => { drawChecklist(); clearTimeout(timer); timer = setTimeout(() => onChange(state), 120); };
 
   const company = h("div", { class: "group" }, h("h3", { text: "Your company" }));
   company.append(
@@ -242,6 +260,7 @@ export function mountCustomiser(root, card, { onChange, requestQuestions }) {
 
   root.replaceChildren(
     h("p", { class: "fine", text: "Every part of the card is yours to change. The card beside this updates as you type, and candidates see exactly that." }),
+    h("div", { class: "field" }, checklistTitle, checklist),
     company, role, skillsGroup, where, qGroup);
 
   if (!state.questions.length) suggestQuestions(true);

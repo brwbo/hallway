@@ -1,7 +1,9 @@
-import { store, h, api, reducedMotion, timeLabel, MARIA_ASK, MARIA_ANSWERS, AHMED_ANSWERS } from "./common.js";
+import { store, h, api, reducedMotion, timeLabel, download, MARIA_ASK, MARIA_ANSWERS, AHMED_ANSWERS } from "./common.js";
 import { avatar, avatarStack, plainStack } from "./avatar.js";
 import { mountFollowup } from "./followup.js";
 import { normaliseCard } from "./company-form.js";
+import { scheduleFor } from "./plan-data.js";
+import { clock, buildIcs, buildCsv } from "/shared/schedule.js";
 
 const ELINA = "Elina Virtanen";
 const el = (id) => document.getElementById(id);
@@ -126,9 +128,38 @@ function renderLog() {
     h("td", { class: "num", text: timeLabel(d.at) }))));
 }
 
+function renderSchedule() {
+  const items = scheduleFor(event);
+  const root = el("schedule");
+  if (!items.length) {
+    root.replaceChildren(h("p", { class: "msg", text: "Accepted conversations get a time and a booth here." }));
+    return;
+  }
+  root.replaceChildren(h("table", { class: "pilot pilot-even", "aria-label": "Schedule for the day" },
+    h("thead", {}, h("tr", {}, ["Time", "Booth", "Company", "Candidate", "Question to ask"].map((t) => h("th", { scope: "col", text: t })))),
+    h("tbody", {}, items.map((i) => h("tr", {},
+      h("th", { scope: "row", text: i.start === null ? "No slot left" : `${clock(i.start)} to ${clock(i.end)}` }),
+      h("td", { "data-col": "Booth", text: `Booth ${i.booth}` }),
+      h("td", { "data-col": "Company", text: cName(i.company_id) }),
+      h("td", { "data-col": "Candidate", text: pName(i.candidate_id) }),
+      h("td", { "data-col": "Question to ask", text: i.question }))))));
+}
+
+function exportCsv() {
+  const slots = new Map(scheduleFor(event).map((i) => [i.id, i]));
+  const follow = store.get("followups", {});
+  const rows = decisions.map((d) => {
+    const slot = slots.get(d.suggestion_id);
+    const f = follow[d.suggestion_id] || {};
+    return { company: cName(d.company_id), candidate: shownName(d.candidate_id), decision: d.status, decided_by: d.by, decided_at: d.at, time: slot && slot.start !== null ? clock(slot.start) : "", booth: slot ? slot.booth : "", talked: f.talked || "", outcome: f.outcome || "", note: f.note || "" };
+  });
+  download("hallway-decisions.csv", buildCsv(rows), "text/csv");
+}
+
 function afterDecision() {
   renderSuggestions();
   renderLog();
+  renderSchedule();
   renderFairness();
   if (followup) followup.refresh();
 }
@@ -343,6 +374,8 @@ function getAccepted() {
   mergeSuggestions();
   followup = mountFollowup(el("followup"), { getAccepted });
   afterDecision();
+  el("ics-all").addEventListener("click", () => download("hallway-schedule.ics", buildIcs(scheduleFor(event), { date: event.event.date }), "text/calendar"));
+  el("csv").addEventListener("click", exportCsv);
   el("run").addEventListener("click", runStory);
   el("reset").addEventListener("click", resetStory);
   await mountFloor();
