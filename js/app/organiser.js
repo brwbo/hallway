@@ -195,7 +195,7 @@ function openDetail(id) {
   const quotes = ev && (ev.in_their_words || []).slice(0, 2);
   const need = needsFor(s.company_id);
   const tasks = need && (need.tasks || []).filter(Boolean).slice(0, 3);
-  detail.replaceChildren(
+  const parts = [
     h("div", { class: "sheet-head" },
       h("div", { class: "person-head" },
         hiddenNow(s.candidate_id) ? plainStack(String(candNumber(s.candidate_id)), company, { size: 72 }) : avatarStack(s.candidate_id, company, { size: 72 }),
@@ -212,7 +212,8 @@ function openDetail(id) {
       : h("div", { class: "row" },
         h("button", { class: "btn btn-primary", type: "button", disabled: atLimit, "aria-label": `Accept ${title}, decided by Elina`, onclick: () => decide(s, "accepted") }, "Accept"),
         h("button", { class: "btn", type: "button", "aria-label": `Skip ${title}, decided by Elina`, onclick: () => decide(s, "skipped") }, "Skip"),
-        h("span", { class: "fine", text: atLimit ? `${cName(s.company_id)} is at its limit of ${cap}. Skip this one, or raise the limit on the company page.` : "Decided by Elina" })));
+        h("span", { class: "fine", text: atLimit ? `${cName(s.company_id)} is at its limit of ${cap}. Skip this one, or raise the limit on the company page.` : "Decided by Elina" }))];
+  detail.replaceChildren(...parts.filter(Boolean));
   detail.showModal();
 }
 
