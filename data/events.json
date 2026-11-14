@@ -1,0 +1,5 @@
+[
+  { "id": "e-espoo-talent-day", "name": "Espoo Tech Talent Day", "date": "2026-12-04", "format": "hybrid", "venue": "Dipoli, Otaniemi", "company_ids": ["c-tuulia", "c-nordhaul", "c-kuura", "c-aurinkovirta", "c-pikkupeli"] },
+  { "id": "e-health-energy-day", "name": "Espoo Health and Energy Day", "date": "2026-12-11", "format": "in person", "venue": "Tapiola Library Hall", "company_ids": ["c-kuura", "c-aurinkovirta"] },
+  { "id": "e-software-logistics-meetup", "name": "Otaniemi Software and Logistics Meetup", "date": "2027-01-21", "format": "in person", "venue": "Startup Sauna, Otaniemi", "company_ids": ["c-tuulia", "c-nordhaul", "c-pikkupeli"] }
+]

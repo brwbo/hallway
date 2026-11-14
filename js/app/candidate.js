@@ -80,7 +80,7 @@ function renderEvidence(ev, fresh) {
     h("p", { class: "fine", "data-reveal": "", text: ev.note || "Not a score. A starting point for a conversation." }),
     h("div", { class: "after", "data-reveal": "" },
       h("p", { class: "fine", text: "Saved in this browser. A person will ask a follow-up in person." }),
-      h("a", { class: "btn btn-primary", href: "organiser.html", text: "See it on the event floor" })));
+      h("a", { class: "btn btn-primary", href: "organiser.html", text: "See it on the event page" })));
   evidence.replaceChildren(wrap);
   if (fresh) reveal(wrap);
   else wrap.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("is-in"));

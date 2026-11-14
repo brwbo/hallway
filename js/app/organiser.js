@@ -1,31 +1,45 @@
 import { store, h, api, reducedMotion, timeLabel, download, MARIA_ASK, MARIA_ANSWERS, AHMED_ANSWERS } from "./common.js";
 import { avatar, avatarStack, plainStack } from "./avatar.js";
 import { mountFollowup } from "./followup.js";
+import { mountSeeker } from "./seeker.js";
+import { renderFairness } from "./fairness-view.js";
 import { normaliseCard } from "./company-form.js";
-import { scheduleFor } from "./plan-data.js";
-import { clock, buildIcs, buildCsv } from "/shared/schedule.js";
+import { buildCsv } from "/shared/schedule.js";
 
 const ELINA = "Elina Virtanen";
+const HOME = "e-espoo-talent-day";
 const el = (id) => document.getElementById(id);
-const sugList = el("sugs");
 
 let event = null;
-let floor = null;
+let eventId = store.get("event", HOME);
 let followup = null;
-let suggestions = [];
-let decisions = store.get("decisions", []);
-let highlightId = null;
+let seeker = null;
 let fairness = null;
+let suggestions = [];
+let decisions = [];
+let highlightId = null;
 let blind = store.get("blind", false);
+const filter = { status: "all", company: "all" };
 
-const localNeeds = () => { const n = store.get("needs"); return n && n.title ? n : null; };
+const home = () => eventId === HOME;
+const key = (base) => (home() ? base : `${base}:${eventId}`);
+const localNeeds = () => { const n = home() ? store.get("needs") : null; return n && n.title ? n : null; };
 const companyOf = (id) => event.companies.find((c) => c.id === id);
 const candidateOf = (id) => event.candidates.find((c) => c.id === id);
 const pName = (id) => (candidateOf(id) || {}).name || id;
 const candNumber = (id) => event.candidates.findIndex((c) => c.id === id) + 1;
-const revealed = (candidateId) => decisions.some((d) => d.candidate_id === candidateId && d.status === "accepted");
-const hiddenNow = (candidateId) => blind && !revealed(candidateId);
+const revealed = (id) => decisions.some((d) => d.candidate_id === id && d.status === "accepted");
+const hiddenNow = (id) => blind && !revealed(id);
 const shownName = (id) => (hiddenNow(id) ? `Candidate ${candNumber(id)}` : pName(id));
+const decisionFor = (id) => decisions.find((d) => d.suggestion_id === id);
+const acceptedCount = (id) => decisions.filter((d) => d.company_id === id && d.status === "accepted").length;
+
+function companyObj(id) {
+  const known = companyOf(id);
+  if (known) return known;
+  const l = localNeeds();
+  return { id, slot: 0, mark: l && l.company && l.company.mark };
+}
 
 function cName(id) {
   const c = companyOf(id);
@@ -34,44 +48,51 @@ function cName(id) {
   return l && l.company_id === id && l.company && l.company.name ? l.company.name : id;
 }
 
-function capacityOf(companyId) {
+function capacityOf(id) {
   const l = localNeeds();
-  if (l && l.company_id === companyId && Number.isInteger(l.capacity)) return l.capacity;
-  const c = companyOf(companyId);
-  return (c && c.capacity) || 3;
+  if (l && l.company_id === id && Number.isInteger(l.capacity)) return l.capacity;
+  return (companyOf(id) || {}).capacity || 3;
 }
 
-function offersOf(companyId) {
+function offersOf(id) {
   const l = localNeeds();
-  if (l && l.company_id === companyId && Array.isArray(l.support)) return l.support;
-  const c = companyOf(companyId);
-  return (c && c.support) || [];
+  if (l && l.company_id === id && Array.isArray(l.support)) return l.support;
+  return (companyOf(id) || {}).support || [];
 }
 
-function wantsOf(candidateId) {
-  if (candidateId === "p-ahmed") {
+function wantsOf(id) {
+  if (home() && id === "p-ahmed") {
     const saved = store.get("wants");
     if (Array.isArray(saved)) return saved;
   }
-  const c = candidateOf(candidateId);
-  return (c && c.support_wanted) || [];
+  return (candidateOf(id) || {}).support_wanted || [];
 }
 
-const acceptedCount = (companyId) => decisions.filter((d) => d.company_id === companyId && d.status === "accepted").length;
+function evidenceFor(s) {
+  const known = event.evidence_cards && event.evidence_cards[s.candidate_id] && event.evidence_cards[s.candidate_id][s.company_id];
+  if (known) return known;
+  const saved = home() ? store.get("evidence") : null;
+  return saved && saved.candidate_id === s.candidate_id ? saved : null;
+}
+
+function needsFor(id) {
+  const l = localNeeds();
+  if (l && l.company_id === id) return l;
+  return (event.needs_cards && event.needs_cards[id]) || null;
+}
 
 function mergeSuggestions() {
   const map = new Map();
   (event.suggestions || []).forEach((s) => map.set(s.id, s));
-  store.get("suggestions", []).forEach((s) => map.set(s.id, s));
+  if (home()) store.get("suggestions", []).forEach((s) => map.set(s.id, s));
   suggestions = [...map.values()];
 }
 
-function decisionFor(id) {
-  return decisions.find((d) => d.suggestion_id === id);
-}
+const stateOf = (s) => (decisionFor(s.id) || {}).status || "waiting";
+const STATE_TEXT = { waiting: "Waiting", accepted: "Accepted", skipped: "Skipped" };
 
 function renderLoad() {
-  const ids = [...new Set(suggestions.map((s) => s.company_id))];
+  const ids = [...new Set(suggestions.map((s) => s.company_id))].sort((a, b) => ((companyOf(a) || {}).stall || 99) - ((companyOf(b) || {}).stall || 99));
   const offeredMax = Math.max(0, ...ids.map((id) => suggestions.filter((s) => s.company_id === id).length));
   el("load").replaceChildren(
     h("p", { class: "label", text: "Conversations per company" }),
@@ -79,42 +100,34 @@ function renderLoad() {
       const used = acceptedCount(id);
       const cap = capacityOf(id);
       return h("div", { class: "load-row" },
-        h("span", { class: "load-name", text: cName(id) }),
+        h("span", { class: "load-name", text: `${cName(id)}${(companyOf(id) || {}).stall ? `, stall ${companyOf(id).stall}` : ""}` }),
         h("span", { class: "track", role: "img", "aria-label": `${used} of ${cap} accepted` }, h("i", { class: "fill bar-acc", style: `transform:scaleX(${Math.min(1, used / cap)})` })),
         h("span", { class: "num fine", text: `${used} of ${cap}` }));
     }),
-    h("p", { class: "fine", text: ids.length ? `Each company is offered at most ${offeredMax} people, not all ${event.candidates.length}, and takes only as many as it chose.` : "Suggestions appear here with each company’s limit." }));
+    h("p", { class: "fine", text: ids.length ? `Each company is offered at most ${offeredMax} people, not all ${event.candidates.length}, and takes only as many as it chose.` : "" }));
 }
 
-function renderSuggestions() {
-  el("sug-empty").hidden = suggestions.length > 0;
-  sugList.replaceChildren(...suggestions.map((s) => {
-    const d = decisionFor(s.id);
+function visible() {
+  return suggestions.filter((s) => (filter.status === "all" || stateOf(s) === filter.status) && (filter.company === "all" || s.company_id === filter.company));
+}
+
+function renderGrid() {
+  const shown = visible();
+  const accepted = decisions.filter((d) => d.status === "accepted").length;
+  el("count").textContent = `${shown.length} of ${suggestions.length} responses shown. ${accepted} accepted.`;
+  el("grid-empty").hidden = shown.length > 0;
+  el("grid").replaceChildren(...shown.map((s) => {
+    const st = stateOf(s);
     const name = shownName(s.candidate_id);
-    const title = `${cName(s.company_id)} and ${name}`;
-    const company = companyOf(s.company_id) || { id: s.company_id, slot: 0, mark: (localNeeds() || {}).company && (localNeeds() || {}).company.mark };
-    const wants = wantsOf(s.candidate_id);
-    const offers = offersOf(s.company_id);
-    const match = wants.filter((w) => offers.includes(w));
-    const cap = capacityOf(s.company_id);
-    const atLimit = !d && acceptedCount(s.company_id) >= cap;
-    return h("li", { class: `suggest${s.id === highlightId ? " is-focus" : ""}`, "data-id": s.id, "data-company": s.company_id, "data-candidate": s.candidate_id },
-      h("div", { class: "person-head" },
+    const company = companyObj(s.company_id);
+    return h("li", { class: `rcard is-${st}${s.id === highlightId ? " is-focus" : ""}`, "data-id": s.id },
+      h("button", { class: "rcard-open", type: "button", "aria-haspopup": "dialog", "aria-label": `Open ${name} and ${cName(s.company_id)}, ${STATE_TEXT[st].toLowerCase()}`, onclick: () => openDetail(s.id) },
         hiddenNow(s.candidate_id) ? plainStack(String(candNumber(s.candidate_id)), company, { size: 56 }) : avatarStack(s.candidate_id, company, { size: 56 }),
-        h("div", { class: "person-who" },
-          h("h3", { text: name }),
-          h("p", { class: "meta", text: `with ${cName(s.company_id)}` }))),
-      h("p", { class: "meta", text: s.why }),
-      wants.length ? h("p", { class: "meta support-line", text: `Asked for: ${wants.join(", ")}. ${match.length ? `Offered here: ${match.join(", ")}.` : "None of it is offered here."}` }) : null,
-      h("p", { class: "ask", text: `Ask: ${s.opening_question}` }),
-      d ? h("p", { class: `state${d.status === "skipped" ? " state-skip" : ""}`, text: d.status === "accepted" ? `Accepted by ${d.by}` : `Skipped by ${d.by}` })
-        : h("div", { class: "row" },
-          h("button", { class: "btn btn-primary btn-small", type: "button", disabled: atLimit, "aria-label": `Accept ${title}, decided by Elina`, onclick: () => decide(s, "accepted") }, "Accept"),
-          h("button", { class: "btn btn-small", type: "button", "aria-label": `Skip ${title}, decided by Elina`, onclick: () => decide(s, "skipped") }, "Skip"),
-          h("span", { class: "fine", text: atLimit ? `${cName(s.company_id)} is at its limit of ${cap}. Skip this one, or raise the limit on the company page.` : "Decided by Elina" })));
+        h("span", { class: "rcard-text" },
+          h("span", { class: "rcard-name", text: name }),
+          h("span", { class: "meta", text: `${cName(s.company_id)}${company.stall ? `, stall ${company.stall}` : ""}` }),
+          h("span", { class: `badge badge-${st}`, text: STATE_TEXT[st] }))));
   }));
-  renderLoad();
-  if (floor) { try { floor.setSuggestions(suggestions); } catch {} }
 }
 
 function renderLog() {
@@ -128,103 +141,95 @@ function renderLog() {
     h("td", { class: "num", text: timeLabel(d.at) }))));
 }
 
-function renderSchedule() {
-  const items = scheduleFor(event);
-  const root = el("schedule");
-  if (!items.length) {
-    root.replaceChildren(h("p", { class: "msg", text: "Accepted conversations get a time and a booth here." }));
-    return;
-  }
-  root.replaceChildren(h("table", { class: "pilot pilot-even", "aria-label": "Schedule for the day" },
-    h("thead", {}, h("tr", {}, ["Time", "Booth", "Company", "Candidate", "Question to ask"].map((t) => h("th", { scope: "col", text: t })))),
-    h("tbody", {}, items.map((i) => h("tr", {},
-      h("th", { scope: "row", text: i.start === null ? "No slot left" : `${clock(i.start)} to ${clock(i.end)}` }),
-      h("td", { "data-col": "Booth", text: `Booth ${i.booth}` }),
-      h("td", { "data-col": "Company", text: cName(i.company_id) }),
-      h("td", { "data-col": "Candidate", text: pName(i.candidate_id) }),
-      h("td", { "data-col": "Question to ask", text: i.question }))))));
-}
-
 function exportCsv() {
-  const slots = new Map(scheduleFor(event).map((i) => [i.id, i]));
-  const follow = store.get("followups", {});
+  const follow = store.get(key("followups"), {});
   const rows = decisions.map((d) => {
-    const slot = slots.get(d.suggestion_id);
     const f = follow[d.suggestion_id] || {};
-    return { company: cName(d.company_id), candidate: shownName(d.candidate_id), decision: d.status, decided_by: d.by, decided_at: d.at, time: slot && slot.start !== null ? clock(slot.start) : "", booth: slot ? slot.booth : "", talked: f.talked || "", outcome: f.outcome || "", note: f.note || "" };
+    return { company: cName(d.company_id), candidate: shownName(d.candidate_id), decision: d.status, decided_by: d.by, decided_at: d.at, stall: (companyOf(d.company_id) || {}).stall || "", talked: f.talked || "", outcome: f.outcome || "", note: f.note || "" };
   });
-  download("hallway-decisions.csv", buildCsv(rows), "text/csv");
+  download(`hallway-decisions-${eventId}.csv`, buildCsv(rows), "text/csv");
 }
 
-function afterDecision() {
-  renderSuggestions();
+function getAccepted() {
+  return decisions.filter((d) => d.status === "accepted").map((d) => {
+    const s = suggestions.find((x) => x.id === d.suggestion_id);
+    const name = pName(d.candidate_id);
+    return { id: d.suggestion_id, candidateName: name, first: name.split(" ")[0], companyName: cName(d.company_id), eventName: event.event.name, question: s ? s.opening_question : "", organiser: ELINA };
+  });
+}
+
+function invitationsFor(candidateId) {
+  return decisions.filter((d) => d.status === "accepted" && d.candidate_id === candidateId).map((d) => {
+    const s = suggestions.find((x) => x.id === d.suggestion_id) || { candidate_id: candidateId, company_id: d.company_id };
+    return { company: companyObj(d.company_id), companyName: cName(d.company_id), needs: needsFor(d.company_id), evidence: evidenceFor(s), question: s.opening_question || "" };
+  });
+}
+
+function refresh() {
+  renderGrid();
+  renderLoad();
   renderLog();
-  renderSchedule();
-  renderFairness();
+  renderFairness(el("fair"), { fairness, suggestions, candidates: event.candidates, decisions });
   if (followup) followup.refresh();
+  if (seeker) seeker.refresh();
+}
+
+const detail = el("detail");
+
+function section(title, ...kids) {
+  return h("div", { class: "sheet-part" }, h("h3", { text: title }), ...kids);
+}
+
+function openDetail(id) {
+  const s = suggestions.find((x) => x.id === id);
+  if (!s) return;
+  const d = decisionFor(s.id);
+  const name = shownName(s.candidate_id);
+  const company = companyObj(s.company_id);
+  const title = `${cName(s.company_id)} and ${name}`;
+  const wants = wantsOf(s.candidate_id);
+  const match = wants.filter((w) => offersOf(s.company_id).includes(w));
+  const cap = capacityOf(s.company_id);
+  const atLimit = !d && acceptedCount(s.company_id) >= cap;
+  const ev = hiddenNow(s.candidate_id) ? null : evidenceFor(s);
+  const quotes = ev && (ev.in_their_words || []).slice(0, 2);
+  const need = needsFor(s.company_id);
+  const tasks = need && (need.tasks || []).filter(Boolean).slice(0, 3);
+  detail.replaceChildren(
+    h("div", { class: "sheet-head" },
+      h("div", { class: "person-head" },
+        hiddenNow(s.candidate_id) ? plainStack(String(candNumber(s.candidate_id)), company, { size: 72 }) : avatarStack(s.candidate_id, company, { size: 72 }),
+        h("div", { class: "person-who" },
+          h("h2", { id: "detail-h", text: name }),
+          h("p", { class: "meta", text: `Responded to ${cName(s.company_id)}${company.stall ? `, stall ${company.stall}` : ""}` }))),
+      h("button", { class: "btn btn-small", type: "button", onclick: () => detail.close() }, "Close")),
+    section("Why this conversation", h("p", { text: s.why })),
+    wants.length ? section("Support they asked for", h("p", { text: `${wants.join(", ")}. ${match.length ? `Offered here: ${match.join(", ")}.` : "None of it is offered here."}` })) : null,
+    quotes && quotes.length ? section("In their own words", h("ul", { class: "quotes" }, quotes.map((q) => h("li", {}, h("blockquote", { text: q }))))) : null,
+    need && need.title ? section(`What ${cName(s.company_id)} is looking for`, h("p", { class: "meta", text: need.title }), tasks && tasks.length ? h("ul", { class: "plain" }, tasks.map((t) => h("li", { text: t }))) : null) : null,
+    section("A question to open with", h("p", { class: "ask", text: s.opening_question })),
+    d ? h("p", { class: `state${d.status === "skipped" ? " state-skip" : ""}`, text: d.status === "accepted" ? `Accepted by ${d.by}. ${shownName(s.candidate_id)} can now see the invitation on the job seeker tab.` : `Skipped by ${d.by}. The job seeker is not told.` })
+      : h("div", { class: "row" },
+        h("button", { class: "btn btn-primary", type: "button", disabled: atLimit, "aria-label": `Accept ${title}, decided by Elina`, onclick: () => decide(s, "accepted") }, "Accept"),
+        h("button", { class: "btn", type: "button", "aria-label": `Skip ${title}, decided by Elina`, onclick: () => decide(s, "skipped") }, "Skip"),
+        h("span", { class: "fine", text: atLimit ? `${cName(s.company_id)} is at its limit of ${cap}. Skip this one, or raise the limit on the company page.` : "Decided by Elina" })));
+  detail.showModal();
 }
 
 function decide(s, status) {
   if (decisionFor(s.id)) return;
   if (status === "accepted" && acceptedCount(s.company_id) >= capacityOf(s.company_id)) return;
   decisions.push({ suggestion_id: s.id, status, company_id: s.company_id, candidate_id: s.candidate_id, by: ELINA, at: new Date().toISOString() });
-  store.set("decisions", decisions);
+  store.set(key("decisions"), decisions);
   if (s.id === highlightId) markStep(4, true);
-  afterDecision();
-  if (status === "accepted") {
-    if (blind) remountFloor();
-    else if (floor) { try { floor.connect(s.company_id, s.candidate_id); } catch {} }
-  }
+  const said = `${status === "accepted" ? "Accepted" : "Skipped"} ${cName(s.company_id)} and ${pName(s.candidate_id)}.`;
+  detail.close();
+  refresh();
+  el("count").textContent = `${said} ${el("count").textContent}`;
+  if (status === "accepted" && seeker) seeker.show(s.candidate_id);
 }
 
-const pct = (n) => `${Math.round((n || 0) * 100)}%`;
-
-function bar(cls, label, value) {
-  return h("div", { class: "bar-line" },
-    h("span", { class: "track", role: "img", "aria-label": `${label} ${pct(value)}` }, h("i", { class: `fill ${cls}`, style: `transform:scaleX(${Math.min(1, value || 0)})` })),
-    h("span", { class: "num", text: pct(value) }));
-}
-
-function rowsOf(x) {
-  if (!x) return [];
-  return Array.isArray(x) ? x : (x.rows || []);
-}
-
-function renderFairness() {
-  const root = el("fair");
-  if (!fairness) {
-    root.replaceChildren(h("p", { class: "msg", text: "The fairness figures could not load. The shared module is missing." }));
-    return;
-  }
-  let stats;
-  try {
-    stats = fairness.suggestionStats(suggestions, event.candidates, decisions);
-  } catch (e) {
-    root.replaceChildren(h("p", { class: "msg msg-error", text: "The fairness figures could not be worked out." }));
-    return;
-  }
-  const titles = { country: "Country", language: "Language", education: "Education route" };
-  root.replaceChildren(...Object.keys(titles).map((key) => {
-    const rows = rowsOf(stats[key]);
-    const isFlagged = (r) => r.gap === true || (r.gap && r.gap.flag) || r.under === true;
-    const groupEl = (r) => {
-      const flagged = isFlagged(r);
-      const share = Math.round((r.pool || 0) * 100);
-      return h("div", { class: "group" },
-        h("div", { class: "group-name" }, h("span", { text: r.value }), h("span", { class: "num fine", text: `${share}% of pool` })),
-        h("div", { class: "bars" }, bar("bar-pool", "Whole pool", r.pool), bar("bar-sug", "Suggested", r.suggested), bar("bar-acc", "Accepted", r.accepted)),
-        flagged && suggestions.length ? h("p", { class: "gap-note", text: `${r.value} is ${share}% of the pool but ${pct(r.suggested)} of suggestions. Worth a second look.` }) : null);
-    };
-    const shown = new Set(rows.slice(0, 4));
-    rows.filter(isFlagged).slice(0, 3).forEach((r) => shown.add(r));
-    const first = rows.filter((r) => shown.has(r));
-    const rest = rows.filter((r) => !shown.has(r));
-    return h("div", { class: "fair-col" },
-      h("h3", { text: titles[key] }),
-      rows.length ? first.map(groupEl) : h("p", { class: "msg", text: "No figures yet." }),
-      rest.length ? h("details", { class: "more" }, h("summary", { text: `Show ${rest.length} more` }), h("div", { class: "more-list" }, rest.map(groupEl))) : null);
-  }));
-}
+detail.addEventListener("click", (e) => { if (e.target === detail) detail.close(); });
 
 function markStep(n, finished) {
   el("steps").querySelectorAll("li").forEach((li) => {
@@ -258,7 +263,6 @@ async function runStory() {
     if (!data || !data.needs_card) throw new Error("The needs card was not finished.");
     const needs = data.needs_card;
     store.set("needs", normaliseCard(needs));
-
     markStep(2);
     storyMsg("Ahmed is answering the questions...");
     const q = await api("/api/questions", { needs_card: needs });
@@ -266,7 +270,6 @@ async function runStory() {
     const ev = (await api("/api/evidence", { needs_card: needs, answers })).evidence_card;
     ev.candidate_id = ev.candidate_id || "p-ahmed";
     store.set("evidence", ev);
-
     markStep(3);
     storyMsg("Looking for a conversation worth starting...");
     const sug = await api("/api/suggest", { needs_cards: [needs], evidence_cards: [ev] });
@@ -275,108 +278,118 @@ async function runStory() {
     const saved = store.get("suggestions", []).filter((s) => !fresh.some((f) => f.id === s.id));
     store.set("suggestions", [...saved, ...fresh]);
     decisions = decisions.filter((d) => !fresh.some((f) => f.id === d.suggestion_id));
-    store.set("decisions", decisions);
+    store.set(key("decisions"), decisions);
     mergeSuggestions();
     const target = fresh.find((s) => s.candidate_id === "p-ahmed") || fresh[0];
     highlightId = target.id;
-    afterDecision();
-    if (floor) { try { floor.focusCompany(target.company_id); floor.focusCandidate(target.candidate_id); } catch {} }
+    filter.status = "all";
+    filter.company = "all";
+    el("f-status").value = "all";
+    el("f-company").value = "all";
+    refresh();
     markStep(4);
-    storyMsg(`Ahmed’s suggestion is in the list. Press Accept as ${ELINA}.`);
-    const node = sugList.querySelector(`[data-id="${CSS.escape(target.id)}"]`);
+    storyMsg(`Ahmed’s response is in the grid. Open it and press Accept as ${ELINA}.`);
+    const node = el("grid").querySelector(`[data-id="${CSS.escape(target.id)}"]`);
     if (node) node.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "center" });
   } catch (e) {
-    storyMsg(`${e.message} The story needs the server endpoints to be running.`, true);
+    storyMsg(`${e.message} This needs the server endpoints to be running.`, true);
   }
   btn.disabled = false;
 }
 
 function resetStory() {
+  if (!home()) return;
   ["needs", "evidence", "suggestions", "decisions", "followups"].forEach((k) => store.del(k));
   decisions = [];
   highlightId = null;
   mergeSuggestions();
   markStep(0);
   storyMsg("");
-  afterDecision();
-  if (floor) { try { floor.clearConnections(); } catch {} }
+  followup = mountFollowup(el("followup"), { getAccepted, storeKey: key("followups") });
+  refresh();
 }
 
-function showFallback(reason) {
-  el("floor-canvas").hidden = true;
-  const fb = el("floor-fallback");
-  fb.hidden = false;
-  fb.replaceChildren(
-    h("h3", { text: "The 3D floor is not available" }),
-    h("p", { class: "meta", text: reason }),
-    h("p", { class: "meta", text: "Companies" }),
-    h("ul", {}, event.companies.map((c) => h("li", { text: `${c.name}, ${c.sector || ""}`.replace(/, $/, "") }))),
-    h("p", { class: "meta", text: "Candidates" }),
-    h("ul", {}, event.candidates.map((c) => h("li", { text: `${shownName(c.id)}, ${hiddenNow(c.id) ? "" : c.country || ""}`.replace(/, $/, "") }))));
+function drawFilters() {
+  const select = el("f-company");
+  select.replaceChildren(h("option", { value: "all", text: "All companies" }), ...event.companies.map((c) => h("option", { value: c.id, text: `${c.name}, stall ${c.stall}` })));
+  select.value = filter.company;
 }
 
-async function mountFloor() {
-  try {
-    const mod = await import("/js/scene/floor.js");
-    const people = event.candidates.map((c) => ({ ...c, name: shownName(c.id) }));
-    floor = await mod.mountFloor(el("floor-canvas"), { companies: event.companies, candidates: people, reduced: reducedMotion() });
-    floor.on("select", ({ type, id }) => {
-      sugList.querySelectorAll(".suggest").forEach((li) => {
-        li.classList.toggle("is-focus", li.dataset[type] === id);
-      });
+function drawEventMeta() {
+  const when = new Date(`${event.event.date}T12:00:00`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  el("event-meta").textContent = `${when}, ${event.event.venue}, ${event.event.format}. ${event.companies.length} stalls and ${event.candidates.length} people.`;
+  const canStory = home();
+  el("run").disabled = !canStory;
+  el("reset").disabled = !canStory;
+  if (!canStory) storyMsg("The live response is only available on Espoo Tech Talent Day.");
+  else storyMsg("");
+}
+
+async function loadEvent(id) {
+  event = await api(`/api/event?event=${encodeURIComponent(id)}`);
+  eventId = event.event.id;
+  store.set("event", eventId);
+  decisions = store.get(key("decisions"), []);
+  highlightId = null;
+  filter.status = "all";
+  filter.company = "all";
+  el("f-status").value = "all";
+  el("event-pick").replaceChildren(...event.events.map((e) => h("option", { value: e.id, text: e.name })));
+  el("event-pick").value = eventId;
+  mergeSuggestions();
+  drawFilters();
+  drawEventMeta();
+  followup = mountFollowup(el("followup"), { getAccepted, storeKey: key("followups") });
+  seeker = mountSeeker({ pick: el("seeker-pick"), list: el("invites"), empty: el("invites-empty") }, { event: event.event, organiser: ELINA, candidates: event.candidates, invitationsFor });
+  markStep(0);
+  refresh();
+}
+
+function setupTabs() {
+  const tabs = [el("tab-org"), el("tab-seeker")];
+  const select = (tab, focus) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      el(t.getAttribute("aria-controls")).hidden = !on;
     });
-    window.addEventListener("resize", () => { try { floor.resize(); } catch {} });
-    decisions.filter((d) => d.status === "accepted").forEach((d) => floor.connect(d.company_id, d.candidate_id));
-    floor.setSuggestions(suggestions);
-    document.documentElement.dataset.floor = "ready";
-  } catch (e) {
-    floor = null;
-    showFallback("The list beside it has everything you need.");
-  }
-}
-
-async function remountFloor() {
-  if (floor) { try { floor.destroy(); } catch {} floor = null; }
-  const old = el("floor-canvas");
-  const fresh = old.cloneNode(false);
-  fresh.hidden = false;
-  old.replaceWith(fresh);
-  await mountFloor();
-}
-
-function getAccepted() {
-  return decisions.filter((d) => d.status === "accepted").map((d) => {
-    const s = suggestions.find((x) => x.id === d.suggestion_id);
-    const name = pName(d.candidate_id);
-    return { id: d.suggestion_id, candidateName: name, first: name.split(" ")[0], companyName: cName(d.company_id), question: s ? s.opening_question : "", organiser: ELINA };
+    if (focus) tab.focus();
+    store.set("tab", tab.id);
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => select(t));
+    t.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); select(tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length], true); }
+      if (e.key === "Home") { e.preventDefault(); select(tabs[0], true); }
+      if (e.key === "End") { e.preventDefault(); select(tabs[tabs.length - 1], true); }
+    });
   });
+  const saved = tabs.find((t) => t.id === store.get("tab"));
+  if (saved) select(saved);
 }
 
 (async function init() {
+  setupTabs();
   try {
-    event = await api("/api/event");
+    await loadEventWithFallback();
   } catch (e) {
-    el("floor-canvas").hidden = true;
-    const fb = el("floor-fallback");
-    fb.hidden = false;
-    fb.replaceChildren(h("p", { class: "msg msg-error", text: `${e.message} The event data comes from the server, so the floor cannot show yet.` }));
+    el("grid").replaceChildren(h("li", { class: "msg msg-error", text: `${e.message} The event data comes from the server, so the grid cannot show yet.` }));
     return;
   }
   try { fairness = await import("/shared/fairness.js"); } catch { fairness = null; }
+  refresh();
   const blindBox = el("blind");
   blindBox.checked = blind;
-  blindBox.addEventListener("change", () => {
-    blind = blindBox.checked;
-    store.set("blind", blind);
-    afterDecision();
-    remountFloor();
-  });
-  mergeSuggestions();
-  followup = mountFollowup(el("followup"), { getAccepted });
-  afterDecision();
-  el("ics-all").addEventListener("click", () => download("hallway-schedule.ics", buildIcs(scheduleFor(event), { date: event.event.date }), "text/calendar"));
+  blindBox.addEventListener("change", () => { blind = blindBox.checked; store.set("blind", blind); refresh(); });
+  el("f-status").addEventListener("change", (e) => { filter.status = e.target.value; renderGrid(); });
+  el("f-company").addEventListener("change", (e) => { filter.company = e.target.value; renderGrid(); });
+  el("event-pick").addEventListener("change", (e) => loadEvent(e.target.value).catch((err) => storyMsg(err.message, true)));
   el("csv").addEventListener("click", exportCsv);
   el("run").addEventListener("click", runStory);
   el("reset").addEventListener("click", resetStory);
-  await mountFloor();
 })();
+
+async function loadEventWithFallback() {
+  try { await loadEvent(eventId); } catch (e) { if (eventId !== HOME) await loadEvent(HOME); else throw e; }
+}

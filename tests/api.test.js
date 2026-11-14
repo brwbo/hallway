@@ -114,6 +114,33 @@ test("event shape and pool_stats add up", async () => {
   }
 });
 
+test("each event only carries its own companies, people and suggestions", async () => {
+  const all = await call(eventApi, { method: "GET" });
+  assert.equal(all.body.events.length, 3);
+  for (const e of all.body.events) {
+    const { status, body } = await call(eventApi, { method: "GET", query: { event: e.id } });
+    assert.equal(status, 200);
+    assert.equal(body.event.id, e.id);
+    const companyIds = new Set(body.companies.map((c) => c.id));
+    const candidateIds = new Set(body.candidates.map((c) => c.id));
+    assert.deepEqual(body.companies.map((c) => c.stall), body.companies.map((_, i) => i + 1));
+    assert.equal(body.pool_stats.total, body.candidates.length);
+    assert.ok(body.suggestions.length > 0);
+    for (const s of body.suggestions) {
+      assert.ok(companyIds.has(s.company_id));
+      assert.ok(candidateIds.has(s.candidate_id));
+    }
+    for (const id of Object.keys(body.needs_cards)) assert.ok(companyIds.has(id));
+  }
+  const small = await call(eventApi, { method: "GET", query: { event: "e-health-energy-day" } });
+  assert.deepEqual(small.body.companies.map((c) => c.id), ["c-kuura", "c-aurinkovirta"]);
+});
+
+test("an unknown event is a 400", async () => {
+  const { status } = await call(eventApi, { method: "GET", query: { event: "nope" } });
+  assert.equal(status, 400);
+});
+
 test("suggestions are unranked and pending, with no scores", async () => {
   const { body } = await call(eventApi, { method: "GET" });
   assert.ok(body.suggestions.length > 0);

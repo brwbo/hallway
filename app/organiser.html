@@ -4,15 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F0E3">
-<title>Event floor · Hallway</title>
-<meta name="description" content="The Espoo Tech Talent Day floor: suggested conversations, decided by a named person.">
+<title>Event · Hallway</title>
+<meta name="description" content="Every response for an Espoo event in one grid. A named person accepts each conversation, and the job seeker sees which stall wants to speak to them.">
 <link rel="icon" href="data:,">
 <link rel="preload" href="../assets/fonts/young-serif-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/hanken-grotesk-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/app.css">
-<script type="importmap">
-{ "imports": { "three": "/vendor/three.module.min.js", "three/addons/": "/vendor/" } }
-</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -21,62 +18,58 @@
   <nav aria-label="Pages">
     <a href="company.html">Company</a>
     <a href="candidate.html">Candidate</a>
-    <a href="organiser.html" aria-current="page">Event floor</a>
-    <a href="plan.html">My plan</a>
+    <a href="organiser.html" aria-current="page">Event</a>
     <a href="privacy.html">Privacy</a>
   </nav>
 </header>
 <main class="page" id="main">
   <div class="page-head">
-    <h1>Event floor</h1>
-    <p class="lead">Espoo Tech Talent Day. Hallway suggests conversations to start. Elina Virtanen from City of Espoo International Working Life Services decides every one.</p>
+    <h1>Event</h1>
+    <p class="lead">Every response for the event, in one grid. Elina Virtanen from City of Espoo International Working Life Services opens each one and decides. Hallway only suggests.</p>
     <p id="demo-note" class="note" hidden>Demo mode: scripted answers, no AI key set</p>
   </div>
-  <div class="floor-wrap">
-    <section aria-labelledby="floor-h">
-      <h2 id="floor-h" class="visually-hidden">Floor</h2>
-      <div class="floor-panel" id="floor-panel">
-        <canvas id="floor-canvas" aria-label="An illustration of an event floor with made-up companies and candidates. The list beside it has the same information." role="img"></canvas>
-        <div class="floor-fallback" id="floor-fallback" hidden></div>
-      </div>
-      <p class="fine floor-note">An illustration with made-up people. A real event would show a booth map, because nothing should track where anyone stands.</p>
-    </section>
-    <section aria-labelledby="sug-h">
-      <h2 id="sug-h">Suggested conversations</h2>
-      <p class="fine hint">These are ideas for who might talk. There are no scores and no ranking.</p>
-      <div class="load" id="load"></div>
-      <div class="toggle-row">
-        <span class="choice-item"><input type="checkbox" id="blind"><label for="blind">Blind review</label></span>
-        <p class="fine">Hides names and pictures until a person accepts, so first impressions do not sway the choice. The floor follows.</p>
-      </div>
-      <ul class="list" id="sugs"></ul>
-      <p class="msg" id="sug-empty" hidden>No suggestions yet. Run the story below, or load the event.</p>
-    </section>
+  <div class="event-bar">
+    <div class="field event-pick"><label for="event-pick">Event</label><select id="event-pick"></select></div>
+    <p class="fine" id="event-meta"></p>
   </div>
-  <section class="story" aria-labelledby="story-h">
-    <h2 id="story-h">Run the whole story</h2>
-    <p class="fine">For a presenter. It fills Maria’s card, answers as Ahmed and adds his suggestion. Then you press Accept.</p>
-    <ol class="story-steps" id="steps">
-      <li data-step="1">Maria’s card</li><li data-step="2">Ahmed answers</li><li data-step="3">Suggestion added</li><li data-step="4">Elina decides</li>
-    </ol>
-    <div class="row"><button class="btn btn-primary" type="button" id="run">Run the whole story</button><button class="btn" type="button" id="reset">Start again</button></div>
-    <p class="msg" id="story-msg" role="status" hidden></p>
+  <div class="tabs" role="tablist" aria-label="Who is looking">
+    <button class="tab" type="button" role="tab" id="tab-org" aria-controls="panel-org" aria-selected="true">Organiser: responses</button>
+    <button class="tab" type="button" role="tab" id="tab-seeker" aria-controls="panel-seeker" aria-selected="false" tabindex="-1">Job seeker view</button>
+  </div>
+  <section class="panel" id="panel-org" role="tabpanel" aria-labelledby="tab-org">
+    <div class="toolbar">
+      <div class="field"><label for="f-status">Show</label>
+        <select id="f-status">
+          <option value="all">All responses</option>
+          <option value="waiting">Waiting for a decision</option>
+          <option value="accepted">Accepted</option>
+          <option value="skipped">Skipped</option>
+        </select></div>
+      <div class="field"><label for="f-company">Company</label><select id="f-company"></select></div>
+      <span class="choice-item"><input type="checkbox" id="blind"><label for="blind">Blind review</label></span>
+    </div>
+    <p class="fine">Blind review hides names and pictures until a person accepts, so first impressions do not sway the choice. There are no scores and no ranking.</p>
+    <p class="meta" id="count" role="status"></p>
+    <ul class="grid" id="grid"></ul>
+    <p class="msg" id="grid-empty" hidden>Nothing matches. Change the filters, or pick another event.</p>
+    <div class="load" id="load"></div>
+  </section>
+  <section class="panel" id="panel-seeker" role="tabpanel" aria-labelledby="tab-seeker" hidden>
+    <div class="toolbar">
+      <div class="field"><label for="seeker-pick">Viewing as</label><select id="seeker-pick"></select></div>
+    </div>
+    <p class="fine">This is what the job seeker sees once an organiser accepts a conversation. Conversations that are not accepted are never shown, and nobody is told they were skipped.</p>
+    <ul class="list" id="invites"></ul>
+    <p class="msg" id="invites-empty" hidden></p>
   </section>
   <section class="block" aria-labelledby="log-h">
-    <div class="block-head"><h2 id="log-h">Decision log</h2><p class="fine">What was decided, by whom, and when. Kept in this browser only.</p></div>
+    <div class="block-head"><h2 id="log-h">Decision log</h2><p class="fine">What was decided for this event, by whom, and when. Kept in this browser only.</p></div>
     <div class="table-scroll"><table class="logtable">
       <thead><tr><th scope="col">Decision</th><th scope="col">Conversation</th><th scope="col">Decided by</th><th scope="col">Time</th></tr></thead>
       <tbody id="decisions"></tbody>
     </table></div>
     <p class="msg" id="log-empty">Nothing decided yet.</p>
-  </section>
-  <section class="block" aria-labelledby="sched-h">
-    <div class="block-head"><h2 id="sched-h">Schedule for the day</h2><p class="fine">Accepted conversations get a 15 minute slot at the company’s booth. Nobody is booked twice and lunch is left free. This is a demo date.</p></div>
-    <div id="schedule"></div>
-    <div class="row">
-      <button class="btn btn-primary" type="button" id="ics-all">Download the calendar (.ics)</button>
-      <button class="btn" type="button" id="csv">Download decisions and follow-ups (CSV)</button>
-    </div>
+    <div class="row"><button class="btn" type="button" id="csv">Download decisions and follow-ups (CSV)</button></div>
   </section>
   <section class="block" aria-labelledby="after-h">
     <div class="block-head"><h2 id="after-h">After the event</h2><p class="fine">Record what happened in each accepted conversation, and write the follow-up yourself.</p></div>
@@ -86,6 +79,15 @@
     <div class="block-head"><h2 id="fair-h">Is anyone being left out?</h2><p class="fine">For each group: its share of everyone at the event, of the suggestions, and of the accepted conversations. A group that is much smaller in suggestions than in the pool is flagged, so a person can look again.</p></div>
     <div class="fair-legend" aria-hidden="true"><span><i class="swatch sw-pool"></i>Whole pool</span><span><i class="swatch sw-sug"></i>Suggested</span><span><i class="swatch sw-acc"></i>Accepted</span></div>
     <div class="fair-grid" id="fair"></div>
+  </section>
+  <section class="story" aria-labelledby="story-h">
+    <h2 id="story-h">Add a live response</h2>
+    <p class="fine">For a presenter, on the Espoo Tech Talent Day. It fills Maria’s card, answers as Ahmed and adds his response to the grid. Then you open it and press Accept.</p>
+    <ol class="story-steps" id="steps">
+      <li data-step="1">Maria’s card</li><li data-step="2">Ahmed answers</li><li data-step="3">Response added</li><li data-step="4">Elina decides</li>
+    </ol>
+    <div class="row"><button class="btn btn-primary" type="button" id="run">Add the live response</button><button class="btn" type="button" id="reset">Start again</button></div>
+    <p class="msg" id="story-msg" role="status" hidden></p>
   </section>
   <section class="block" aria-labelledby="resp-h">
     <h2 id="resp-h" class="visually-hidden">Responsible by design</h2>
@@ -103,14 +105,15 @@
       <tbody>
         <tr><th scope="row">Cards</th><td data-col="This prototype">Made-up people in a static file.</td><td data-col="In a pilot">Saved on Espoo’s own systems, with each person’s agreement.</td></tr>
         <tr><th scope="row">Decisions</th><td data-col="This prototype">Kept in this browser.</td><td data-col="In a pilot">Saved under each organiser’s login, as a full log.</td></tr>
+        <tr><th scope="row">Invitations</th><td data-col="This prototype">Shown on a second tab in the same browser.</td><td data-col="In a pilot">Sent by Espoo to the job seeker, only after a person accepts.</td></tr>
         <tr><th scope="row">Pictures</th><td data-col="This prototype">Drawn avatars, not photos.</td><td data-col="In a pilot">Avatars or initials until a person accepts. A photo can sway a match.</td></tr>
-        <tr><th scope="row">The floor</th><td data-col="This prototype">An illustration with invented people.</td><td data-col="In a pilot">A booth map, without individual candidates or tracking.</td></tr>
         <tr><th scope="row">Fairness</th><td data-col="This prototype">24 people, so the figures are rough.</td><td data-col="In a pilot">The whole registered pool, reviewed by a person before the event.</td></tr>
         <tr><th scope="row">The law</th><td data-col="This prototype">A person decides, no scores, synthetic data.</td><td data-col="In a pilot">Recruitment is high risk under the EU AI Act, so it needs oversight, logging and a data protection check.</td></tr>
       </tbody>
     </table>
   </section>
 </main>
+<dialog class="sheet" id="detail" aria-labelledby="detail-h"></dialog>
 <footer class="foot"><p>Everyone on this site is fictional. Hallway is a placeholder name.</p></footer>
 <script type="module" src="../js/app/organiser.js"></script>
 </body>

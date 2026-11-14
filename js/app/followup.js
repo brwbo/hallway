@@ -12,7 +12,7 @@ const LINES = {
 
 function draftFor(item, rec) {
   const note = (rec.note || "").trim();
-  return `Hello ${item.first}, thank you for talking with ${item.companyName} at Espoo Tech Talent Day. ${LINES[rec.outcome || ""]}${note ? ` ${note}` : ""}\n\nBest wishes,\n${item.organiser}`;
+  return `Hello ${item.first}, thank you for talking with ${item.companyName} at ${item.eventName}.${LINES[rec.outcome || ""]}${note ? ` ${note}` : ""}\n\nBest wishes,\n${item.organiser}`;
 }
 
 function select(label, options, value, onPick) {
@@ -23,9 +23,9 @@ function select(label, options, value, onPick) {
   return h("div", { class: "field" }, h("label", { for: id, text: label }), el);
 }
 
-export function mountFollowup(root, { getAccepted }) {
-  const records = store.get("followups", {});
-  const save = () => store.set("followups", records);
+export function mountFollowup(root, { getAccepted, storeKey = "followups" }) {
+  const records = store.get(storeKey, {});
+  const save = () => store.set(storeKey, records);
 
   function card(item) {
     const rec = records[item.id] || (records[item.id] = { talked: "", outcome: "", note: "", draft: "", edited: false });
